@@ -1,2 +1,2 @@
-# SeungKu-Kang
+# Kang-SeungKu
 피로그래밍 24기 과제 제출 레포입니다.
