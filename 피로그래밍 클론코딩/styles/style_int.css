@@ -1,0 +1,290 @@
+body {
+    background-color: black;
+    width: 100%; margin: 0px auto;
+    font-family: Nexon;
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewport='0 0 20 20'><circle cx='10' cy='10' r='10' fill='%230bec12'/></svg>") 10 10, auto;
+}
+/* header */
+header {
+    display: flex; 
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+    background: linear-gradient(to bottom, black, black);
+    padding-left: calc((100% - 1200px) / 2);
+    padding-right: calc((100% - 1200px) / 2);
+}
+header .menu { margin-left: auto; }
+header .menu ul { 
+    display: flex; list-style: none; 
+}
+header .menu ul li{
+    font-size: 20px;
+    margin-left: 20px; 
+    transition: transform 0.3s ease;
+}
+header .menu ul li:hover{
+    transform: translateY(-5px);
+}
+header .menu ul li a { color: white; text-decoration: none;}
+
+/* section */
+section#interview {
+    padding-left: calc((100% - 1200px) / 2);
+    padding-right: calc((100% - 1200px) / 2);
+    margin-bottom: 60px;
+}
+
+
+
+
+/* 본문 기수 정보 */
+section#interview .portfolio-th {display: flex; justify-content: space-between; align-items: center;}
+section#interview .portfolio-th .portfolio-th-prev a {color:#fff; text-decoration: none;}
+section#interview .portfolio-th .portfolio-th-curr {color:#fff; font-size: 25px;}
+
+section#interview .interview-card-sets {
+    display: flex;
+    flex-wrap: wrap;
+}
+/* 프로젝트 카드 */
+section#interview .interview-card {
+    background-color:#333 ;
+    width: 28%;
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    margin: 15px 10px;
+    padding: 16px;
+    border-radius: 8px;
+    transition: transform 0.1s ease; 
+}
+section#interview .interview-card:hover {
+    transform: translateY(-2px);
+}
+section#interview .interview-card .interview-card-header { 
+    display: flex; justify-content: space-between;
+    height: 60%;
+}
+section#interview .interview-card .interview-card-header .interview-pic { 
+    width: 70px; height: 70px;border-radius: 50%;
+    background: black;
+}
+section#interview .interview-card .interview-card-header .interview-pic img { 
+    width: 100%; height:100%; border-radius: 50%;
+    transform: scale(0.85);
+    transition: transform 0.2s ease;
+}
+section#interview .interview-card:hover .interview-card-header .interview-pic img { 
+    transform: scale(1.0);
+}
+
+section#interview .interview-card .interview-card-header .interview-card-right {
+    margin-left: 15px;
+    display: flex;
+    flex-direction: column;
+}
+section#interview .interview-card .interview-card-header .interview-card-right .interview-profile-name {
+    color: white;
+    font-size: 18px;
+}
+section#interview .interview-card .interview-card-header .interview-card-right .major-badge {
+    background-color: #2188b6; color: white;
+    border: 1px solid #2188b6;
+    border-radius: 5px;
+    padding: 2px 5px; margin-top: 10px;
+}
+section#interview .interview-card .interview-card-header .interview-card-right .non-major-badge {
+    background-color: #c54422; color: white;
+    border: 1px solid #c54422;
+    border-radius: 5px;
+    padding: 2px 5px; margin-top: 10px;
+}
+
+
+/* 인터뷰 카드 - 더보기 */
+section#interview .interview-card .interview-card-header .project-more {
+    margin: 10px 10px 10px auto ;
+}
+
+section#interview .interview-card .interview-card-header .project-more div {
+    justify-content: right;
+    background-color: #888;
+    width: 20px; height: 2px;
+    margin-bottom: 4px;
+}
+section#interview .interview-card .interview-card-header .project-more div:nth-child(1) {
+    margin-right: auto;
+    transition: 0.3s ease-out;
+}
+section#interview .interview-card:hover .interview-card-header .project-more div:nth-child(1) {
+    width: 50%;
+}
+
+section#interview .interview-card .interview-card-header .project-more div:nth-child(3) {
+    margin-left: auto;
+    transition: 0.3s ease-out;
+}
+section#interview .interview-card:hover .interview-card-header .project-more div:nth-child(3) {
+
+    width: 50%;
+}
+section#interview .interview-card .interview-card-intro {
+    margin-top: 15px; color: white;
+
+}
+
+
+
+/* footer */
+
+/* footer top */
+footer #footer-top{
+    background-color: #333;
+    display: flex; 
+    justify-content: space-between;
+    align-items: center;
+    height: 200px;
+    padding-left: calc((100% - 1200px) / 2);
+    padding-right: calc((100% - 1200px) / 2);
+}
+
+footer #footer-top .footer-content {
+    display: flex; justify-content: space-between;
+    width: 100%;
+}
+
+/* footer-contact 전체 */
+footer #footer-top .footer-content .footer-contact ul {
+    display: flex;
+    flex-direction: column;
+    align-items: left; list-style: none;
+    padding-left: 0;
+}
+/* 회칙 */
+footer #footer-top .footer-content .footer-contact ul li a {
+    text-decoration: none;
+    color: white;
+}
+/* 아이콘들 */
+footer #footer-top .footer-content .footer-contact ul .icons {
+    display: flex; justify-content: flex-start;
+}
+/* email contact */
+footer #footer-top .footer-content .footer-contact ul .icons img {
+    width: 25px; height: 25px;
+    margin: 10px 5px;
+}
+footer #footer-top .footer-content .footer-contact ul li a img {
+    margin-right: 15px;
+}
+/* footer-nav */
+footer #footer-top .footer-content .footer-nav {
+    display: flex; 
+}   
+
+footer #footer-top .footer-content .footer-nav ul{
+    display: flex; list-style: none;
+    align-items: center;
+    padding-left: 0;
+}
+
+footer #footer-top .footer-content .footer-nav ul li {
+    font-size: 15px;
+    margin-left: 20px; 
+    transition: transform 0.3s ease;
+    border: solid #888;
+    border-width : 0 2px 0 0 ;
+    padding-right: 20px;
+}
+footer #footer-top .footer-content .footer-nav ul li#recruit a{
+    border: solid #333;
+    border-width : 0 ;
+}
+
+footer #footer-top .footer-content .footer-nav ul li:hover {
+    transform: translateY(-5px);
+}
+
+footer #footer-top .footer-content .footer-nav ul li a {
+    color: white; text-decoration: none;
+    font-size: 15px;
+}
+/* footer bottom */
+footer #footer-bottom {
+    display: flex; justify-content: center;
+    background-color:#222;
+}
+
+footer #footer-bottom p {
+    color: #cfc8c8; 
+    font-size: 12px; font-weight: bold;
+    margin: 15px 0;
+}
+
+header .header-hamburger {
+    display: none; 
+    flex-direction: column;
+    align-items: flex-start; 
+    justify-content: center;
+}
+
+header .header-hamburger div {
+    background-color: white; 
+    width: 25px; height: 3px;             
+    margin-bottom: 5px;    
+}
+
+header .header-hamburger div:nth-child(1) {
+    width: calc(25px * 0.5);
+}
+header .header-hamburger div:nth-child(3) {
+    width: calc(25px * 0.8); 
+}
+
+
+@media screen and (max-width: 1100px) {
+    section#interview,
+    header,
+    footer #footer-top {
+        padding-left: 20px;
+        padding-right: 20px; 
+    }
+    section#interview .interview-card {
+        box-sizing: border-box; 
+        width: calc(50% - 20px); 
+        margin: 15px 10px;
+    }
+}
+
+
+@media screen and (max-width: 700px) {
+    section#interview .interview-card {
+        box-sizing: border-box;
+        width: 100%; 
+        margin: 15px 0; 
+    }
+
+    header .menu {
+        display: none;
+    }
+    header .header-hamburger {
+        display: flex;
+        align-items: flex-end; 
+        margin-left: auto; 
+    }
+
+    footer #footer-top {
+        height: auto;
+        padding-top: 30px;
+        padding-bottom: 30px;
+    }
+    footer #footer-top .footer-content {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+    footer #footer-top .footer-content .footer-nav {
+        display: none; 
+    }
+}
