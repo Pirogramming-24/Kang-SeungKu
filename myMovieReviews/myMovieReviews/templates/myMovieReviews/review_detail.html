@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ review.title }}</title>
+    <link rel="stylesheet" href="./review_detail.css">
+    <link rel="stylesheet" href="./reset.css">
+</head>
+<body>
+    <h1>{{ review.title }}</h1>
+    <p><strong>감독:</strong> {{ review.director }} | <strong>주연:</strong> {{ review.actors }}</p>
+    <p><strong>장르:</strong> {{ review.genre }} | <strong>러닝타임:</strong> {{ review.running_time }}분</p>
+    <p><strong>별점:</strong> ⭐ {{ review.rating }}</p>
+    <hr>
+    <p>{{ review.content }}</p>
+    <hr>
+    
+    <a href="{% url 'review_update' review.pk %}">수정</a>
+    
+    <form action="{% url 'review_delete' review.pk %}" method="post" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>
+    </form>
+    
+    <br><br>
+    <a href="{% url 'review_list' %}">목록으로 돌아가기</a>
+</body>
+</html>

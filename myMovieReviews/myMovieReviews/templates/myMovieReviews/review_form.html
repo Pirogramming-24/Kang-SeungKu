@@ -1,0 +1,24 @@
+{% load static %} <!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Movie Reviews</title>
+    <!-- css 연결방법 -->
+    <link rel="stylesheet" href="{% static 'review_form.css' %}">
+    <link rel="stylesheet" href="{% static 'reset.css' %}">
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <a href="#"><h1><span style="color: red;">Movie</span>reviews</h1></a>
+        </div>
+        <a href="{% url 'review_create' %}"><h3>Add a New review</h3></a>
+    </div>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }} <button type="submit">저장</button>
+    </form>
+    <a href="{% url 'review_list' %}">취소하고 돌아가기</a>
+</body>
+</html>
