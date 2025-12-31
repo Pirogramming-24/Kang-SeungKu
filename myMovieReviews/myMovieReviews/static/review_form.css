@@ -1,0 +1,22 @@
+body .review-form {
+    margin: 10px auto;
+    padding: 10px;
+    width: 500px;
+    display: flex;          
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center;   
+    border-radius: 10px;
+    border: 1px solid #555 ; 
+    
+}
+body .review-form hr {
+    width: 80%; 
+    margin-bottom: 20px; 
+}
+
+body .review-form .review-form-title {
+    font-size: 30px;
+    margin: 20px 10px;
+    font-weight: bold;
+}
