@@ -1,36 +1,56 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ review.title }}</title>
-    <link rel="stylesheet" href="./review_detail.css">
-    <link rel="stylesheet" href="./reset.css">
+    <link rel="stylesheet" href="{% static 'review_detail.css' %}">
+    <link rel="stylesheet" href="{% static 'reset.css' %}">
 </head>
 <body>
     <div class="header">
         <div class="logo">
-            <a href="{% url 'review_list' %}"><h1>my<span style="color: red;">Movie</span>reviews</h1></a>
+            <a href="{% url 'review_list' %}"><h1><span style="color: red;">Movie</span>reviews</h1></a>
         </div>
         <a href="{% url 'review_create' %}"><h3>Add a New review</h3></a>
     </div>
     <hr>
-    <h1>{{ review.title }}</h1>
-    <p><strong>감독:</strong> {{ review.director }} | <strong>주연:</strong> {{ review.actors }}</p>
-    <p><strong>장르:</strong> {{ review.genre }} | <strong>러닝타임:</strong> {{ review.running_time }}분</p>
-    <p><strong>별점:</strong> ⭐ {{ review.rating }}</p>
-    <hr>
-    <p>{{ review.content }}</p>
-    <hr>
-    
-    <a href="{% url 'review_update' review.pk %}">수정</a>
-    
-    <form action="{% url 'review_delete' review.pk %}" method="post" style="display:inline;">
-        {% csrf_token %}
-        <button type="submit" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>
-    </form>
-    
-    <br><br>
-    <a href="{% url 'review_list' %}">목록으로 돌아가기</a>
+    <div class="detail-container">
+        <div class="title-area">
+            <h1>{{ review.title }}</h1>
+            <div class="btn-area">
+                <a href="{% url 'review_update' review.pk %}">수정</a>
+                <form action="{% url 'review_delete' review.pk %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit">삭제</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="movie-info-box">
+            <div class="poster-area">
+                {% if review.poster %}
+                    <img src="{{ review.poster.url }}" alt="{{ review.title }} 포스터">
+                {% else %}
+                    <div class="no-image">No Image</div>
+                {% endif %}
+            </div>
+
+            <div class="info-text">
+                <p><span class="label">개봉년도</span> {{ review.release_year }}년</p>
+                <p><span class="label">감독</span> {{ review.director }}</p>
+                <p><span class="label">주연</span> {{ review.actors }}</p>
+                <p><span class="label">장르</span> {{ review.get_genre_display }}</p>
+                <p><span class="label">별점</span> {{ review.rating }}</p>
+                <p><span class="label">러닝타임</span> {{ hours }}시간 {{ minutes }}분</p>
+            </div>
+        </div>
+
+        <div class="review-content-box">
+            {{ review.content }} 
+            </div>
+
+    </div>
 </body>
 </html>
