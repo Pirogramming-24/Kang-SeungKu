@@ -1,0 +1,119 @@
+
+.detail-container {
+    max-width: 1000px;  
+    margin: 0 auto;     
+    padding: 40px 20px; 
+}
+
+
+.title-area {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;            
+    margin-bottom: 30px;           
+    padding-bottom: 10px;         
+    border-bottom: 1px solid #eee;  
+}
+
+
+.title-area h1 {
+    font-size: 36px;    
+    font-weight: 800;  
+    color: #333;        
+}
+
+.btn-area {
+    display: flex;
+    gap: 10px;         
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-area a, 
+.btn-area button {
+    text-decoration: none;
+    color: #888;    
+    font-size: 14px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: color 0.2s; 
+}
+
+
+.btn-area a:hover, 
+.btn-area button:hover {
+    color: #333;       
+    font-weight: bold;
+}
+
+
+
+.movie-info-box {
+    display: flex;              
+    background-color: #f9f9f9;  
+    padding: 40px;              
+    border-radius: 8px;         
+    margin-bottom: 30px;      
+}
+
+
+.poster-area {
+    margin-right: 40px; 
+    flex-shrink: 0;    
+}
+
+.poster-area img {
+    width: 220px;      
+    height: 300px;     
+    object-fit: cover;  
+    border-radius: 4px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
+}
+
+.poster-area .no-image {
+    width: 220px;
+    height: 300px;
+    background-color: #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #888;
+    border-radius: 4px;
+}
+
+
+.info-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; 
+}
+
+.info-text p {
+    margin-bottom: 12px; 
+    font-size: 16px;
+    color: #555;
+    line-height: 1.6;
+}
+
+.info-text .label {
+    font-weight: bold;
+    color: #222;
+    margin-right: 15px;
+    display: inline-block;
+    width: 80px; 
+}
+
+
+
+.review-content-box {
+    background-color: #666; 
+    padding: 40px;
+    border-radius: 8px;
+    
+    font-size: 16px;
+    line-height: 1.8;  
+    color: #111;
+    min-height: 200px;
+    white-space: pre-line; 
+}
