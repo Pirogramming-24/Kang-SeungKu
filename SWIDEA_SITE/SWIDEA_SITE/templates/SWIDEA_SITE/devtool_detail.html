@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h1 class="page-title">DevTool Detail</h1>
+    <p class="page-desc">개발툴 상세내용 페이지입니다.</p>
+
+    <div class="detail-box">
+        <h2 class="detail-title">{{ devtool.name }}</h2>
+        <div class="detail-info">{{ devtool.kind }}</div>
+        <div class="detail-content">{{ devtool.content }}</div>
+
+        <hr style="border: 0.5px solid #555; margin: 30px 0;">
+        
+        <h3>> 만들 수 있는 SW 목록</h3>
+        <ul>
+            {% for idea in related_ideas %}
+                <li><a href="{% url 'SWIDEA_SITE:idea_detail' idea.pk %}">- {{ idea.title }}</a></li>
+            {% empty %}
+                <li>관련된 아이디어가 없습니다.</li>
+            {% endfor %}
+        </ul>
+
+        <div class="btn-group">
+            <form action="{% url 'SWIDEA_SITE:devtool_delete' devtool.pk %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-red">삭제</button>
+            </form>
+            <a href="{% url 'SWIDEA_SITE:devtool_list' %}" class="btn btn-grey">목록</a>
+            <a href="{% url 'SWIDEA_SITE:devtool_update' devtool.pk %}" class="btn btn-blue">수정</a>
+        </div>
+    </div>
+{% endblock %}

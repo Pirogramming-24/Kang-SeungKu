@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h1 class="page-title">Idea Register/Update</h1>
+    <p class="page-desc">당신의 아이디어를 멋지게 기록하세요!</p>
+
+    <div class="form-box">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label>아이디어명:</label>
+                {{ form.title }}
+            </div>
+            <div class="form-group">
+                <label>Image:</label>
+                {{ form.image }}
+            </div>
+            <div class="form-group">
+                <label>아이디어 설명:</label>
+                {{ form.content }}
+            </div>
+            <div class="form-group">
+                <label>아이디어 관심도:</label>
+                {{ form.interest }}
+            </div>
+            <div class="form-group">
+                <label>예상 개발툴:</label>
+                {{ form.devtool }}
+            </div>
+            
+            <div style="text-align: center; margin-top: 30px;">
+                <button type="submit" class="btn btn-submit">SUBMIT</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>SW Idea Manage</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">My SW Idea Manage</div>
+        <div class="nav-links">
+            <a href="{% url 'SWIDEA_SITE:idea_create' %}">아이디어 등록</a>
+            <a href="{% url 'SWIDEA_SITE:idea_list' %}">아이디어 관리</a>
+            <a href="{% url 'SWIDEA_SITE:devtool_create' %}">개발툴 등록</a>
+            <a href="{% url 'SWIDEA_SITE:devtool_list' %}">개발툴 관리</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <script>
+        // AJAX용 CSRF 토큰 설정 등 필요시 여기에 추가
+    </script>
+</body>
+</html>

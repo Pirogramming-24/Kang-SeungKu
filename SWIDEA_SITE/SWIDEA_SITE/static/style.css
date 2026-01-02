@@ -1,0 +1,139 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #121212;
+    color: #ffffff;
+    font-family: 'Noto Sans KR', sans-serif;
+    /* 배경에 코드 이미지 느낌을 내기 위해 어두운 그라디언트 처리 */
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://source.unsplash.com/random/1920x1080/?code,programming');
+    background-size: cover;
+    background-attachment: fixed;
+}
+
+a { text-decoration: none; color: inherit; }
+ul { list-style: none; padding: 0; }
+
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 50px;
+    background-color: rgba(0, 0, 0, 0.8);
+    border-bottom: 1px solid #333;
+}
+.navbar .logo { font-size: 1.2rem; font-weight: bold; color: #badc58; }
+.nav-links { display: flex; gap: 20px; }
+.nav-links a { font-size: 0.9rem; color: #ccc; }
+.nav-links a:hover { color: #fff; }
+
+/* Container */
+.container {
+    max-width: 1000px;
+    margin: 50px auto;
+    padding: 20px;
+    text-align: center;
+}
+
+.page-title {
+    font-family: 'Courier New', Courier, monospace;
+    color: #badc58;
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+.page-desc { color: #aaa; font-size: 0.9rem; margin-bottom: 40px; }
+
+/* Idea List (Grid) */
+.idea-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+.idea-card {
+    background-color: #fff;
+    color: #333;
+    border-radius: 10px;
+    overflow: hidden;
+    text-align: left;
+    position: relative;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+}
+.idea-card img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+}
+.card-body { padding: 15px; }
+.card-title { font-weight: bold; font-size: 1.1rem; margin-bottom: 5px; display: block;}
+.card-info { font-size: 0.8rem; color: #666; margin-bottom: 5px; }
+.star-icon { position: absolute; top: 10px; right: 10px; color: gold; font-size: 1.2rem; cursor: pointer; }
+
+/* Sort Dropdown */
+.sort-container { text-align: right; margin-bottom: 20px; }
+.sort-select { padding: 5px; border-radius: 5px; background: #fff; }
+
+/* Tables (DevTool List) */
+.styled-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+}
+.styled-table th, .styled-table td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+.styled-table th { background-color: rgba(0, 0, 0, 0.5); color: #badc58; }
+.styled-table tr:hover { background-color: rgba(255, 255, 255, 0.05); }
+
+/* Detail Pages */
+.detail-box {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 40px;
+    border-radius: 15px;
+    text-align: left;
+    border: 1px solid #444;
+}
+.detail-title { font-size: 2rem; color: #fff; margin-bottom: 20px; }
+.detail-info { margin-bottom: 10px; color: #ccc; }
+.detail-content { margin-top: 30px; line-height: 1.6; color: #ddd; white-space: pre-wrap; }
+.btn-group { margin-top: 40px; display: flex; gap: 10px; justify-content: center; }
+
+/* Buttons */
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+.btn-red { background-color: #ff4757; color: white; }
+.btn-grey { background-color: #ced6e0; color: #333; }
+.btn-blue { background-color: #3742fa; color: white; }
+.btn-submit { background-color: #57606f; color: white; padding: 12px 40px; border-radius: 20px; }
+
+/* Forms */
+.form-box {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 40px;
+    border-radius: 15px;
+    text-align: left;
+}
+.form-group { margin-bottom: 20px; }
+.form-group label { display: block; margin-bottom: 5px; color: #badc58; }
+.form-group input, .form-group textarea, .form-group select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    background-color: #fff;
+    box-sizing: border-box;
+}
+
+/* Pagination */
+.pagination { margin-top: 30px; display: flex; justify-content: center; gap: 10px; }
+.pagination a { padding: 5px 10px; background: rgba(255,255,255,0.2); border-radius: 5px; }
