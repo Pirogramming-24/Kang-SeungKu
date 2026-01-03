@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h1 class="page-title">Idea Detail</h1>
+    <p class="page-desc">아이디어 세부내용 페이지입니다.</p>
+
+    <div class="detail-box">
+        <div style="display: flex; gap: 30px; align-items: start;">
+            <div style="flex: 1;">
+                {% if idea.image %}
+                    <img src="{{ idea.image.url }}" style="width: 100%; border-radius: 10px;">
+                {% endif %}
+            </div>
+            
+            <div style="flex: 1;">
+                <h2 class="detail-title">{{ idea.title }} {% if is_starred %}★{% endif %}</h2>
+                <div class="detail-info">1) 아이디어 관심도: {{ idea.interest }}</div>
+                <div class="detail-info">2) 예상 개발 툴: <a href="{% url 'SWIDEA_SITE:devtool_detail' idea.devtool.pk %}" style="text-decoration: underline;">{{ idea.devtool.name }}</a></div>
+                <div class="detail-info">3) 아이디어 설명:</div>
+                <div class="detail-content">{{ idea.content }}</div>
+            </div>
+        </div>
+
+        <div class="btn-group">
+            <form action="{% url 'SWIDEA_SITE:idea_delete' idea.pk %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-red">삭제</button>
+            </form>
+            <a href="{% url 'SWIDEA_SITE:idea_list' %}" class="btn btn-grey">목록</a>
+            <a href="{% url 'SWIDEA_SITE:idea_update' idea.pk %}" class="btn btn-blue">수정</a>
+        </div>
+    </div>
+{% endblock %}

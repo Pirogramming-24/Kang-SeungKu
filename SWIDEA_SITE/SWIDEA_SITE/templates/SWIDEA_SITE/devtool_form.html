@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h1 class="page-title">DevTool Register/Update</h1>
+    <p class="page-desc">자신이 다룰 수 있는 개발툴을 등록해 보세요.</p>
+
+    <div class="form-box">
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label>이름:</label>
+                {{ form.name }}
+            </div>
+            <div class="form-group">
+                <label>종류:</label>
+                {{ form.kind }}
+            </div>
+            <div class="form-group">
+                <label>개발툴 설명:</label>
+                {{ form.content }}
+            </div>
+            
+            <div style="text-align: center; margin-top: 30px;">
+                <button type="submit" class="btn btn-submit">SUBMIT</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}

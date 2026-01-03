@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h1 class="page-title">Idea List</h1>
+    <p class="page-desc">나의 아이디어를 잊지 말고 기록해보세요</p>
+
+    <div class="sort-container">
+        <select class="sort-select" onchange="location = this.value;">
+            <option value="?sort=recent" {% if sort == 'recent' %}selected{% endif %}>최신순</option>
+            <option value="?sort=interest" {% if sort == 'interest' %}selected{% endif %}>찜하기순(관심도)</option>
+            <option value="?sort=name" {% if sort == 'name' %}selected{% endif %}>이름순</option>
+        </select>
+    </div>
+
+    <div class="idea-grid">
+        {% for idea in page_obj %}
+        <div class="idea-card">
+            {% if idea.image %}
+                <img src="{{ idea.image.url }}" alt="{{ idea.title }}">
+            {% else %}
+                <div style="height:150px; background:#ddd;"></div>
+            {% endif %}
+            
+            <div class="star-icon" onclick="toggleStar({{ idea.pk }})">
+               {% if idea.is_starred_by_user %}★{% else %}☆{% endif %}
+            </div>
+
+            <div class="card-body">
+                <a href="{% url 'SWIDEA_SITE:idea_detail' idea.pk %}" class="card-title">{{ idea.title }}</a>
+                <div class="card-info">예상 개발 툴 : {{ idea.devtool.name }}</div>
+                <div class="card-info">
+                    아이디어 관심도 : <span id="interest-{{ idea.pk }}">{{ idea.interest }}</span>
+                    <button onclick="changeInterest({{ idea.pk }}, 'plus')">+</button>
+                    <button onclick="changeInterest({{ idea.pk }}, 'minus')">-</button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}&sort={{ sort }}">&lt;</a>
+        {% endif %}
+        <span>{{ page_obj.number }}</span>
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}&sort={{ sort }}">&gt;</a>
+        {% endif %}
+    </div>
+{% endblock %}
