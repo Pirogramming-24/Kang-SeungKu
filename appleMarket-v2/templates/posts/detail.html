@@ -29,6 +29,15 @@
 <p>지역: {{post.region}}</p>
 <p>가격: {{post.price}}</p>
 <h2 class="my-3">{{post.content}}</h2>
+<h3>식품 영양 정보</h3>
+<ul>
+    <li>칼로리: {{post.calorie}}kcal</li>
+    <hr>
+    <li>탄수화물: {{post.carbo}}g</li>
+    <li>단백질: {{post.protein}}g</li>
+    <li>지방: {{post.fat}}g</li>
+</ul>
+<p>#{{post.hashtag}}</p>
 <p>작성일: {{post.created_at}}</p>
 <p>수정일: {{post.updated_at}}</p>
 <p>이 작성자의 글</p>
