@@ -12,6 +12,12 @@ class Post(models.Model):
     created_at = models.DateTimeField('작성일', auto_now_add=True)
     updated_at = models.DateTimeField('수정일', null=True, blank=True)
     photo = models.ImageField('이미지', blank=True, upload_to='posts/%Y%m%d')
+    nutrition_img = models.ImageField('영양성분이미지', blank=True, upload_to='posts/%Y%m%d')
+    calorie = models.DecimalField('칼로리',default=100.0, max_digits=3, decimal_places=1)
+    carbo = models.DecimalField('탄수화물', default=100.0, max_digits=3, decimal_places=1)
+    protein = models.DecimalField('단백질', default=100.0,  max_digits=3, decimal_places=1)
+    fat = models.DecimalField('지방', default=100.0,  max_digits=3, decimal_places=1)
+    hashtag = models.CharField('해시태그', default='기타', max_length=20)
 
     def save(self, *args, **kwargs):
         if self.pk:  # 수정일 때에만 갱신
