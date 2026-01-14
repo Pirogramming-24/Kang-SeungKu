@@ -4,6 +4,8 @@
 <style>
     main {
         height: 100vh;
+        .form-group { margin-bottom: 15px; }
+        label { font-weight: bold; }
     }
 </style>
 {% endblock %}
@@ -11,30 +13,107 @@
 {% block content %}
 <form action="{% url 'posts:create' %}" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
-    {{ form.as_p }}
+    
+    <div class="form-group"><label>제목:</label> {{ form.title }}</div>
+    <div class="form-group"><label>내용:</label> {{ form.content }}</div>
+    <div class="form-group"><label>지역:</label> {{ form.region }}</div>
+    <div class="form-group"><label>작성자:</label> {{ form.user }}</div>
+    <div class="form-group"><label>가격:</label> {{ form.price }}</div>
+    
+    <div class="form-group">
+        <label>상품 이미지:</label> 
+        {{ form.photo }}
+    </div>
+
+    
+
     <div class="form-group">
         <label>영양성분 이미지:</label> 
-        {{ form.nutrition_img }} </div>
+        {{ form.nutrition_image }}
+    </div>
 
     <div class="form-group">
         <label>칼로리 정보(Kcal):</label> 
-        <input type="text" name="calorie" id="id_calorie" placeholder="분석 중..." class="form-control">
+        <input type="number" name="calorie" id="id_calorie" class="form-control" step="0.1" placeholder="분석 중...">
     </div>
     <div class="form-group">
         <label>탄수화물(g):</label> 
-        <input type="text" name="carbo" id="id_carbo" placeholder="분석 중..." class="form-control">
+        <input type="number" name="carbo" id="id_carbo" class="form-control" step="0.1" placeholder="분석 중...">
     </div>
     <div class="form-group">
         <label>단백질(g):</label> 
-        <input type="text" name="protein" id="id_protein" placeholder="분석 중..." class="form-control">
+        <input type="number" name="protein" id="id_protein" class="form-control" step="0.1" placeholder="분석 중...">
     </div>
     <div class="form-group">
         <label>지방(g):</label> 
-        <input type="text" name="fat" id="id_fat" placeholder="분석 중..." class="form-control">
+        <input type="number" name="fat" id="id_fat" class="form-control" step="0.1" placeholder="분석 중...">
     </div>
-    <div class="form-group">
-        <label>상품 종류 해시태그:</label> {{ form.hashtag }}
-    </div>
-    <button class="btn btn-success">등록하기</button>
+
+    <div class="form-group"><label>상품 종류 해시태그:</label> {{ form.hashtag }}</div>
+
+    <button type="submit" class="btn btn-success mt-3">등록하기</button>
 </form>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const imageInput = document.getElementById('id_nutrition_image'); // forms.py에서 생성된 ID 확인 필요
+        
+        // 결과가 들어갈 입력창들
+        const calorieInput = document.getElementById('id_calorie');
+        const carboInput = document.getElementById('id_carbo');
+        const proteinInput = document.getElementById('id_protein');
+        const fatInput = document.getElementById('id_fat');
+
+        imageInput.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            // 1. "분석 중..." 표시 (User Experience)
+            calorieInput.value = ""; calorieInput.placeholder = "열심히 분석 중...";
+            carboInput.value = ""; carboInput.placeholder = "열심히 분석 중...";
+            proteinInput.value = ""; proteinInput.placeholder = "열심히 분석 중...";
+            fatInput.value = ""; fatInput.placeholder = "열심히 분석 중...";
+
+            // 2. 서버로 보낼 데이터 준비
+            const formData = new FormData();
+            formData.append('nutrition_image', file);
+            
+            // Django CSRF 토큰 가져오기
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+            // 3. AJAX 요청 보내기 (fetch API)
+            fetch("{% url 'posts:ocr_analyze' %}", {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrfToken
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    // 4. 성공 시 값 채워넣기
+                    const info = data.data;
+                    calorieInput.value = info.calorie;
+                    carboInput.value = info.carbo;
+                    proteinInput.value = info.protein;
+                    fatInput.value = info.fat;
+                } else {
+                    alert('OCR 분석에 실패했습니다: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('서버 통신 중 오류가 발생했습니다.');
+            })
+            .finally(() => {
+                // placeholder 원상복구
+                calorieInput.placeholder = "직접 입력 가능";
+                carboInput.placeholder = "직접 입력 가능";
+                proteinInput.placeholder = "직접 입력 가능";
+                fatInput.placeholder = "직접 입력 가능";
+            });
+        });
+    });
+</script>
 {% endblock %}

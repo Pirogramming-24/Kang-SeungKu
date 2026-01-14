@@ -1,6 +1,9 @@
 from django.shortcuts import render, redirect
 from .models import Post
 from .forms import PostForm
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from .services.ocr_services import extract_nutrition_info
 
 # Create your views here.
 def main(request):
@@ -64,3 +67,19 @@ def delete(request, pk):
     post = Post.objects.get(id=pk)
     post.delete()
     return redirect('/')
+
+def ocr_analyze_view(request):
+    if request.method == 'POST' and request.FILES.get('nutrition_image'):
+        try:
+            image_file = request.FILES['nutrition_image']
+            
+            # 서비스 로직 호출
+            result_data = extract_nutrition_info(image_file)
+            
+            # 성공 시 JSON 응답
+            return JsonResponse({'status': 'success', 'data': result_data})
+        except Exception as e:
+            print(f"OCR Error: {e}")
+            return JsonResponse({'status': 'fail', 'message': str(e)})
+            
+    return JsonResponse({'status': 'fail', 'message': '이미지가 없습니다.'})
