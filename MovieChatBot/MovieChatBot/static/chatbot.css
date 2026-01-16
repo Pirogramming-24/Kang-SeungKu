@@ -1,0 +1,130 @@
+/* 기본 배경 (연한 회색) */
+body {
+    background-color: #f5f5f5;
+    color: #333;
+    font-family: 'Pretendard', sans-serif;
+}
+
+/* 헤더 스타일 (공통) */
+.header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 20px 40px; background-color: #fff; border-bottom: 1px solid #eee;
+}
+.header a { text-decoration: none; color: black; }
+
+/* 챗봇 메인 박스 */
+.chat-container {
+    max-width: 800px;
+    margin: 40px auto;
+    background-color: #fff;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    border-top: 6px solid #e50914; /* 붉은색 포인트 */
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 700px; /* 높이 고정 */
+}
+
+/* 챗봇 타이틀 영역 */
+.chat-header {
+    padding: 20px;
+    text-align: center;
+    border-bottom: 1px solid #eee;
+    background-color: #fff;
+}
+.chat-title { font-size: 24px; font-weight: 800; margin-bottom: 5px; }
+.chat-subtitle { font-size: 14px; color: #888; }
+
+/* 채팅창 영역 (스크롤) */
+.chat-window {
+    flex-grow: 1;
+    padding: 30px;
+    overflow-y: auto;
+    background-color: #fcfcfc;
+}
+
+/* 메시지 공통 */
+.message { margin-bottom: 20px; max-width: 80%; }
+.msg-sender { font-size: 12px; margin-bottom: 5px; font-weight: bold; }
+
+/* 봇 메시지 (왼쪽, 회색) */
+.message.bot { float: left; clear: both; }
+.message.bot .msg-sender { color: #e50914; margin-left: 5px; }
+.message.bot .msg-bubble {
+    background-color: #f0f0f0;
+    color: #333;
+    padding: 15px;
+    border-radius: 15px;
+    border-top-left-radius: 2px;
+    line-height: 1.5;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+/* 사용자 메시지 (오른쪽, 붉은색) */
+.message.user { float: right; clear: both; text-align: right; }
+.message.user .msg-sender { color: #555; margin-right: 5px; }
+.message.user .msg-bubble {
+    background-color: #e50914; /* 포인트 컬러 */
+    color: white;
+    padding: 15px;
+    border-radius: 15px;
+    border-top-right-radius: 2px;
+    text-align: left;
+    box-shadow: 0 2px 5px rgba(229, 9, 20, 0.2);
+}
+
+/* 추천 칩 */
+.suggestion-chips {
+    padding: 15px;
+    background-color: #fff;
+    border-top: 1px solid #eee;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+.suggestion-chips button {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 8px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 13px;
+    color: #555;
+    transition: 0.2s;
+}
+.suggestion-chips button:hover {
+    border-color: #e50914;
+    color: #e50914;
+    background-color: #fff5f5;
+}
+
+/* 입력창 영역 */
+.input-area {
+    padding: 20px;
+    background-color: #fff;
+    border-top: 1px solid #eee;
+    display: flex;
+    gap: 10px;
+}
+.input-area input {
+    flex-grow: 1;
+    padding: 15px;
+    border: 2px solid #eee;
+    border-radius: 8px;
+    outline: none;
+    font-size: 15px;
+}
+.input-area input:focus { border-color: #e50914; }
+
+.btn-send {
+    background-color: #e50914;
+    color: white;
+    border: none;
+    padding: 0 25px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.btn-send:hover { background-color: #cc0000; }

@@ -1,92 +1,99 @@
 from django.core.management.base import BaseCommand
 from django.conf import settings
-from MovieChatBot.models import Movie
+from MovieChatBot.models import Movie, Review
 import requests
 
 class Command(BaseCommand):
-    help = 'TMDB에서 인기 영화의 상세 정보를 수집합니다.'
+    help = 'TMDB에서 인기 영화와 줄거리(요약)를 수집합니다.'
 
     def handle(self, *args, **kwargs):
-        # settings.py에서 가져온 키 사용
         api_key = getattr(settings, 'TMDB_API_KEY', None)
-        
         if not api_key:
-            self.stdout.write(self.style.ERROR("API 키가 없습니다. .env 파일과 settings.py를 확인해주세요."))
+            self.stdout.write(self.style.ERROR("API 키가 없습니다."))
             return
 
-        # 장르 매핑 (TMDB 영어 장르 -> 형님 모델의 한글 코드)
+        # [수정됨] TMDB가 한국어로 응답하므로, 키 값을 한글로 변경했습니다.
         GENRE_MAP = {
-            'Action': 'ACTION',
-            'Romance': 'ROMANCE',
-            'Comedy': 'COMEDY',
-            'Thriller': 'THRILLER',
-            'Drama': 'DRAMA',
-            'Science Fiction': 'SF'
+            '액션': 'ACTION',
+            '로맨스': 'ROMANCE',
+            '멜로': 'ROMANCE', # TMDB가 가끔 멜로라고 줄 수도 있음
+            '코미디': 'COMEDY',
+            '스릴러': 'THRILLER',
+            '드라마': 'DRAMA',
+            'SF': 'SF',
+            '공상과학': 'SF'
         }
 
-        # 1. 인기 영화 목록 가져오기 (1페이지)
+        # 1. 영화 목록 가져오기
         list_url = 'https://api.themoviedb.org/3/movie/popular'
         params = {'api_key': api_key, 'language': 'ko-KR', 'page': 1}
         
         try:
             response = requests.get(list_url, params=params)
-            response.raise_for_status()
             movie_list = response.json().get('results', [])
-        except Exception as e:
-            self.stdout.write(self.style.ERROR(f"API 호출 실패: {e}"))
+        except Exception:
             return
 
-        self.stdout.write(f"{len(movie_list)}개의 영화 정보를 상세 조회 및 저장합니다...")
+        self.stdout.write(f"{len(movie_list)}개의 영화와 요약을 저장합니다...")
 
-        count = 0
         for item in movie_list:
             movie_id = item['id']
             
             # 2. 상세 정보 조회
             detail_url = f"https://api.themoviedb.org/3/movie/{movie_id}"
-            detail_params = {
-                'api_key': api_key, 
-                'language': 'ko-KR',
-                'append_to_response': 'credits'
-            }
+            detail_params = {'api_key': api_key, 'language': 'ko-KR', 'append_to_response': 'credits'}
             
-            detail_res = requests.get(detail_url, params=detail_params)
-            if detail_res.status_code != 200:
-                continue
-                
-            info = detail_res.json()
+            res = requests.get(detail_url, params=detail_params)
+            if res.status_code != 200: continue
+            info = res.json()
 
-            # 3. 데이터 가공
-            release_date = info.get('release_date', '')
-            release_year = int(release_date[:4]) if release_date else None
-
+            # 데이터 가공
+            release_year = int(info['release_date'][:4]) if info.get('release_date') else None
+            
+            # [수정됨] 장르 매핑 로직
             tmdb_genres = info.get('genres', [])
             genre_code = None
             if tmdb_genres:
-                first_genre_name = tmdb_genres[0]['name']
+                first_genre_name = tmdb_genres[0]['name'] # 이제 여기서 '액션'이 나옵니다.
                 genre_code = GENRE_MAP.get(first_genre_name) 
+                # 만약 매핑 안 된 장르(예: 애니메이션)라면 그냥 None으로 둠
 
-            crew_list = info.get('credits', {}).get('crew', [])
-            director = next((p['name'] for p in crew_list if p['job'] == 'Director'), "정보 없음")
+            crew = info.get('credits', {}).get('crew', [])
+            director = next((p['name'] for p in crew if p['job'] == 'Director'), "정보 없음")
             
-            cast_list = info.get('credits', {}).get('cast', [])
-            actors = ", ".join([p['name'] for p in cast_list[:3]])
+            cast = info.get('credits', {}).get('cast', [])
+            actors = ", ".join([p['name'] for p in cast[:3]])
+            
+            tmdb_score = info.get('vote_average', 0.0)
 
-            # 4. DB 저장
-            Movie.objects.update_or_create(
+            # 3. 영화 저장
+            movie, created = Movie.objects.update_or_create(
                 tmdb_id=info['id'],
                 defaults={
                     'title': info['title'],
                     'poster_path': info['poster_path'],
                     'release_year': release_year,
-                    'genre': genre_code,
+                    'genre': genre_code, # 수정된 장르 코드 저장
                     'running_time': info.get('runtime'),
                     'director': director,
                     'actors': actors,
-                    'tmdb_average': info.get('vote_average', 0.0),
+                    'tmdb_average': tmdb_score,
                 }
             )
-            count += 1
-            self.stdout.write(f"[{count}] {info['title']} 저장 완료")
 
-        self.stdout.write(self.style.SUCCESS("데이터 수집 완료!"))
+            # 4. 줄거리(Overview) 저장 로직
+            overview = info.get('overview', '')
+            if overview:
+                rating = round(tmdb_score / 2)
+                if rating < 1: rating = 1
+                if rating > 5: rating = 5
+
+                if not Review.objects.filter(movie=movie, is_tmdb=True).exists():
+                    Review.objects.create(
+                        movie=movie,
+                        rating=rating,
+                        content=overview,
+                        is_tmdb=True
+                    )
+                    
+        self.stdout.write(self.style.SUCCESS("완료!"))

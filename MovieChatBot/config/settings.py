@@ -15,10 +15,12 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv()
+BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(BASE_DIR / ".env") 
 TMDB_API_KEY = os.getenv('TMDB_API_KEY')
+UPSTAGE_API_KEY = os.getenv('UPSTAGE_API_KEY')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # Quick-start development settings - unsuitable for production

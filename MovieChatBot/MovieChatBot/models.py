@@ -102,6 +102,6 @@ class Review(models.Model):
     
     created_at = models.DateTimeField(auto_now_add=True) 
     updated_at = models.DateTimeField(auto_now=True)
-
+    is_tmdb = models.BooleanField(default=False, verbose_name="TMDB 출처 여부")
     def __str__(self):
         return f"[{self.movie.title}] - {self.rating}점"

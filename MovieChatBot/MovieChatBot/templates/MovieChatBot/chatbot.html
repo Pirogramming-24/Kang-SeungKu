@@ -1,0 +1,105 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 영화 추천</title>
+    <link rel="stylesheet" href="{% static 'chatbot.css' %}">
+    <link rel="stylesheet" href="{% static 'reset.css' %}">
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <a href="{% url 'movie_list' %}"><h1>my<span style="color: red;">Movie</span>reviews</h1></a>
+        </div>
+        <a href="{% url 'movie_create' %}"><h3>Add a New review</h3></a>
+    </div>
+    <hr>
+    
+    <div class="chat-container">
+        <div class="chat-header">
+            <h2 class="chat-title"><span style="color:red">AI</span> 영화 추천</h2>
+            <p class="chat-subtitle">형님의 컬렉션을 분석해 딱 맞는 영화를 추천해드립니다.</p>
+        </div>
+
+        <div class="chat-window" id="chat-window">
+            <div class="message bot">
+                <div class="msg-sender">챗봇</div>
+                <div class="msg-bubble">
+                    안녕하세요 형님! 찾으시는 장르나 분위기를 말씀해주시면 형님의 컬렉션 안에서 최고의 영화를 찾아드리겠습니다.
+                </div>
+            </div>
+        </div>
+
+        <div class="suggestion-chips">
+            <button onclick="sendSuggestion('액션 영화 추천해줘')">🔥 액션 영화</button>
+            <button onclick="sendSuggestion('감동적인 드라마 추천해줘')">💧 감동 드라마</button>
+            <button onclick="sendSuggestion('평점 높은 영화 뭐야?')">⭐ 고평점 영화</button>
+        </div>
+
+        <div class="input-area">
+            <input type="text" id="user-input" placeholder="질문을 입력하세요..." onkeypress="handleKeyPress(event)">
+            <button onclick="sendMessage()" class="btn-send">전송</button>
+        </div>
+    </div>
+
+    <script>
+        function handleKeyPress(e) {
+            if (e.key === 'Enter') sendMessage();
+        }
+
+        function sendSuggestion(text) {
+            document.getElementById('user-input').value = text;
+            sendMessage();
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('user-input');
+            const message = input.value.trim();
+            if (!message) return;
+
+            addMessage('user', message);
+            input.value = '';
+            
+            // [수정됨] 로딩 메시지도 '챗봇'으로 표시
+            const loadingId = addMessage('bot', '잠시만 기다려주십시오 형님...');
+
+            fetch("{% url 'chatbot' %}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ message: message })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById(loadingId).remove();
+                addMessage('bot', data.response);
+            })
+            .catch(error => {
+                document.getElementById(loadingId).innerText = "죄송합니다 형님. 터미널 로그를 확인해주세요.";
+            });
+        }
+
+        function addMessage(sender, text) {
+            const chatWindow = document.getElementById('chat-window');
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `message ${sender}`;
+            msgDiv.id = 'msg-' + Date.now();
+            
+            // [수정됨] 여기서 '챗봇'이라는 이름을 사용합니다
+            const senderName = sender === 'bot' ? '챗봇' : '나';
+            
+            msgDiv.innerHTML = `
+                <div class="msg-sender">${senderName}</div>
+                <div class="msg-bubble">${text.replace(/\n/g, '<br>')}</div>
+            `;
+            
+            chatWindow.appendChild(msgDiv);
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+            return msgDiv.id;
+        }
+    </script>
+</body>
+</html>

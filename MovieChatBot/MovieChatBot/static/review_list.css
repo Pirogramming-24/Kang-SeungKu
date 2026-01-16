@@ -1,22 +1,126 @@
-* {
-    padding: 0; margin: 0;
-    box-sizing: border-box;
+/* ================= 기본 설정 ================= */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Pretendard', sans-serif; background-color: #fff; color: #111; }
+a { text-decoration: none; color: inherit; }
+
+/* ================= 헤더 영역 ================= */
+.header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 20px 40px;
+}
+.header-buttons { display: flex; gap: 15px; align-items: center; }
+
+/* 챗봇 & 새 리뷰 버튼 */
+.btn-chatbot {
+    background-color: #e50914; color: white; padding: 8px 15px;
+    border-radius: 20px; font-weight: bold; font-size: 14px;
+    box-shadow: 0 2px 5px rgba(229, 9, 20, 0.3); transition: 0.3s;
+}
+.btn-chatbot:hover { background-color: #cc0000; transform: translateY(-2px); }
+
+.btn-new-review { font-weight: bold; font-size: 16px; color: #111; }
+
+/* ================= 검색 및 정렬 ================= */
+.search-sort-container {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 20px 40px; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;
 }
 
-body .review-container {
-    display: flex; justify-content: space-around;
-    margin: 5%; flex-wrap: wrap; gap: 20px;
+.search-form { display: flex; gap: 10px; flex-grow: 1; max-width: 500px; }
+.search-form input {
+    flex-grow: 1; padding: 10px 15px; border: 1px solid #ccc;
+    border-radius: 5px; outline: none;
 }
-body .review-container .Review {
-    padding: 10px; 
-}
-body .review-container .Review .movie-info h3 a {
-    text-decoration: none;
-    color: black;
+.search-form input:focus { border-color: #e50914; }
+.search-form button {
+    background-color: #e50914; color: white; border: none;
+    padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold;
 }
 
-body .review-container .Review .movie-no-img {
-    width: 150px; height: 200px; 
-    background-color: #ddd; display: flex; 
-    align-items: center; justify-content: center;
+.sort-menu a {
+    padding: 5px 10px; border: 1px solid #ccc; border-radius: 5px;
+    margin-left: 5px; font-size: 14px;
+}
+.sort-menu a.active, .sort-menu a:hover {
+    background-color: #333; color: white; border-color: #333;
+}
+
+/* ================= [핵심] 반응형 그리드 레이아웃 ================= */
+.review-container {
+    display: grid;
+    /* PC: 4열, 좁아지면 자동 줄바꿈 */
+    grid-template-columns: repeat(4, 1fr); 
+    gap: 30px; /* 카드 사이 간격 */
+    padding: 0 40px 40px 40px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* 화면 크기에 따른 컬럼 수 조정 (미디어 쿼리) */
+@media (max-width: 1200px) {
+    .review-container { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 900px) {
+    .review-container { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+    .review-container { grid-template-columns: 1fr; } /* 모바일 1열 */
+    .header { flex-direction: column; gap: 15px; }
+    .search-sort-container { flex-direction: column; align-items: stretch; }
+}
+
+/* ================= 영화 카드 디자인 ================= */
+.Review {
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08); /* 살짝 그림자 */
+    transition: transform 0.3s;
+    border: 1px solid #eee;
+    display: flex;
+    flex-direction: column; /* 내용물 세로 정렬 */
+}
+.Review:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.12); }
+
+/* 포스터 틀 고정 */
+.movie-img {
+    width: 100%;
+    height: 380px; /* 높이 고정 */
+    overflow: hidden;
+    background-color: #f0f0f0;
+    border-bottom: 1px solid #eee;
+}
+.movie-img img {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+}
+.movie-no-img {
+    width: 100%; height: 100%; display: flex;
+    align-items: center; justify-content: center; color: #999;
+}
+
+/* 카드 정보 영역 */
+.movie-info { padding: 20px; }
+.movie-info h3 {
+    margin-bottom: 10px; font-size: 18px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; /* 제목 길면 ... 처리 */
+}
+.movie-info p, .movie-info .rating-row {
+    font-size: 14px; color: #555; margin-bottom: 5px;
+}
+.movie-info .label { font-weight: bold; color: #222; margin-right: 5px; }
+
+/* ================= 페이지네이션 스타일 ================= */
+.pagination {
+    text-align: center; margin: 40px 0 60px 0;
+}
+.pagination a {
+    display: inline-block; padding: 8px 15px;
+    margin: 0 3px; border: 1px solid #ddd; border-radius: 5px;
+    color: #333; transition: 0.2s;
+}
+.pagination a:hover {
+    background-color: #e50914; color: white; border-color: #e50914;
+}
+.pagination .current {
+    font-weight: bold; margin: 0 10px; color: #e50914;
 }
