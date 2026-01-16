@@ -4,16 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Movie Reviews</title>
-    <!-- css 연결방법 -->
     <link rel="stylesheet" href="{% static 'review_form.css' %}">
     <link rel="stylesheet" href="{% static 'reset.css' %}">
 </head>
 <body>
     <div class="header">
         <div class="logo">
-            <a href="{% url 'review_list' %}"><h1><span style="color: red;">Movie</span>reviews</h1></a>
+            <a href="{% url 'movie_list' %}"><h1><span style="color: red;">Movie</span>reviews</h1></a>
         </div>
-        <a href="{% url 'review_create' %}"><h3>Add a New review</h3></a>
+        <a href="{% url 'movie_create' %}"><h3>Add a New review</h3></a>
     </div>
     <hr>
     <div class="review-form">
@@ -23,7 +22,16 @@
         <hr>
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            {{ form.as_p }} <button type="submit">저장</button>
+            
+            <h3 style="color: white; margin-bottom: 10px;">영화 정보</h3>
+            {{ movie_form.as_p }}
+            
+            <hr style="border: 0.5px solid #333; margin: 20px 0;">
+
+            <h3 style="color: white; margin-bottom: 10px;">나의 리뷰</h3>
+            {{ review_form.as_p }}
+
+            <button type="submit">저장</button>
         </form>
     </div>
 </body>

@@ -1,0 +1,64 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Movie Reviews</title>
+    <link rel="stylesheet" href="{% static 'review_list.css' %}">
+    <link rel="stylesheet" href="{% static 'reset.css' %}">
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <a href="{% url 'movie_list' %}"><h1>my<span style="color: red;">Movie</span>reviews</h1></a>
+        </div>
+        <a href="{% url 'movie_create' %}"><h3>Add a New review</h3></a>
+    </div>
+    <hr>
+    
+    <div style="padding: 20px; text-align: right;">
+        <span style="color: white; margin-right: 10px;">정렬:</span>
+        <a href="?sort=latest" style="color: #00ff00; text-decoration: none; margin-right: 10px;">최신순</a>
+        <a href="?sort=title" style="color: #00ff00; text-decoration: none;">제목순</a>
+    </div>
+
+    <div class="review-container">
+    {% for movie in movies %} 
+        <div class="Review">
+            <div class="movie-img">
+                {% if movie.poster_path %}
+                    <img src="https://image.tmdb.org/t/p/w185{{ movie.poster_path }}" alt="{{ movie.title }}">
+                {% elif movie.poster_image %}
+                    <img src="{{ movie.poster_image.url }}" alt="{{ movie.title }}">
+                {% else %}
+                    <div class="movie-no-img"><span>No Image</span></div>
+                {% endif %}
+            </div>
+            
+            <div class="movie-info">
+                <h3><a href="{% url 'movie_detail' movie.pk %}">{{ movie.title }}</a></h3>
+                
+                <span style="font-weight : bold; color: gray">개봉년도 </span><span>{{ movie.release_year }} 년</span><br>   
+                <span style="font-weight : bold; color: gray">별점 </span>
+                <span class="star-rating">
+                    {% for star in movie.star_list %}
+                        {% if star == 'full' %}
+                            <span style="color: gold;">★</span> {% else %}
+                            <span style="color: #555;">★</span> {% endif %}
+                    {% endfor %}
+                </span>
+                <br>
+                <span>
+                    {% if movie.reviews.first %}
+                        {{ movie.reviews.first.rating }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </span><br>
+            </div> 
+        </div>
+    {% endfor %}
+    </div>
+</body>
+</html>

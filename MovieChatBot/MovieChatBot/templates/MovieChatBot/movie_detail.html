@@ -1,0 +1,74 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ movie.title }}</title>
+    <link rel="stylesheet" href="{% static 'review_detail.css' %}">
+    <link rel="stylesheet" href="{% static 'reset.css' %}">
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <a href="{% url 'movie_list' %}"><h1><span style="color: red;">Movie</span>reviews</h1></a>
+        </div>
+        <a href="{% url 'movie_create' %}"><h3>Add a New review</h3></a>
+    </div>
+    <hr>
+    <div class="detail-container">
+        <div class="title-area">
+            <h1>{{ movie.title }}</h1>
+            <div class="btn-area">
+                <a href="{% url 'movie_update' movie.pk %}">수정</a>
+                <form action="{% url 'movie_delete' movie.pk %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit">삭제</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="movie-info-box">
+            <div class="poster-area">
+                {% if movie.poster_path %}
+                    <img src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}" alt="{{ movie.title }}">
+                {% elif movie.poster_image %}
+                    <img src="{{ movie.poster_image.url }}" alt="{{ movie.title }}">
+                {% else %}
+                    <div class="no-image">No Image</div>
+                {% endif %}
+            </div>
+
+            <div class="info-text">
+                <p><span class="label">개봉년도</span> {{ movie.release_year }}년</p>
+                <p><span class="label">감독</span> {{ movie.director }}</p>
+                <p><span class="label">주연</span> {{ movie.actors }}</p>
+                <p><span class="label">장르</span> {{ movie.get_genre_display|default:movie.genres }}</p>
+                <p><span class="label">러닝타임</span> {{ movie.running_time_display }}</p>
+                
+                <p><span class="label">별점</span> 
+                    <span class="star-rating">
+                        {% for star in movie.star_list %}
+                            {% if star == 'full' %}
+                                <span style="color: gold;">★</span>
+                            {% else %}
+                                <span style="color: #ccc;">★</span>
+                            {% endif %}
+                        {% endfor %}
+                    </span>
+                </p>
+            </div>
+        </div>
+
+        <div class="review-content-box">
+            <h3>나의 리뷰</h3>
+            {% if review %}
+                {{ review.content }}
+            {% else %}
+                <p>작성된 리뷰 내용이 없습니다.</p>
+            {% endif %}
+        </div>
+
+    </div>
+</body>
+</html>
