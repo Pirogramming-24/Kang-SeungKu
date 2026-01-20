@@ -50,3 +50,88 @@
 - [ ] 제한 탭 접근 시 alert 후 로그인 페이지로 redirect
 - [ ] 로그인 성공 시 원래 페이지로 복귀(next)
 
+
+```
+HuggingFaceHW
+├─ config
+│  ├─ asgi.py
+│  ├─ settings.py
+│  ├─ urls.py
+│  ├─ wsgi.py
+│  └─ __init__.py
+├─ manage.py
+├─ README.md
+├─ requirements.txt
+└─ Richman
+   ├─ admin.py
+   ├─ apps.py
+   ├─ migrations
+   │  └─ __init__.py
+   ├─ models.py
+   ├─ services
+   │  └─ huggingface.py
+   ├─ static
+   │  ├─ css
+   │  └─ js
+   ├─ tests.py
+   ├─ urls.py
+   ├─ views.py
+   └─ __init__.py
+
+```
+```
+HuggingFaceHW
+├─ config
+│  ├─ asgi.py
+│  ├─ settings.py
+│  ├─ urls.py
+│  ├─ wsgi.py
+│  └─ __init__.py
+├─ manage.py
+├─ README.md
+├─ requirements.txt
+└─ Richman
+   ├─ admin.py
+   ├─ apps.py
+   ├─ migrations
+   │  └─ __init__.py
+   ├─ models.py
+   ├─ services
+   │  └─ huggingface.py
+   ├─ static
+   │  ├─ css
+   │  └─ js
+   ├─ tests.py
+   ├─ urls.py
+   ├─ views.py
+   └─ __init__.py
+
+```
+```
+HuggingFaceHW
+├─ config
+│  ├─ asgi.py
+│  ├─ settings.py
+│  ├─ urls.py
+│  ├─ wsgi.py
+│  └─ __init__.py
+├─ manage.py
+├─ README.md
+├─ requirements.txt
+└─ Richman
+   ├─ admin.py
+   ├─ apps.py
+   ├─ migrations
+   │  └─ __init__.py
+   ├─ models.py
+   ├─ services
+   │  └─ huggingface.py
+   ├─ static
+   │  ├─ css
+   │  └─ js
+   ├─ tests.py
+   ├─ urls.py
+   ├─ views.py
+   └─ __init__.py
+
+```
