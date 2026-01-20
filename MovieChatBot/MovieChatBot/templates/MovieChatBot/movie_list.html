@@ -1,0 +1,91 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Movie Reviews</title>
+    <link rel="stylesheet" href="{% static 'review_list.css' %}">
+    <link rel="stylesheet" href="{% static 'reset.css' %}">
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <a href="{% url 'movie_list' %}"><h1>my<span style="color: red;">Movie</span>reviews</h1></a>
+        </div>
+        <div class="header-buttons">
+            <a href="{% url 'chatbot' %}" class="btn-chatbot">🤖 AI 챗봇 추천</a>
+            <a href="{% url 'movie_create' %}" class="btn-new-review">Add a New review</a>
+        </div>
+    </div>
+    <hr>
+    
+    <div class="search-sort-container">
+        <form action="{% url 'movie_list' %}" method="get" class="search-form">
+            <input type="text" name="q" value="{{ q|default:'' }}" placeholder="영화 제목, 감독, 배우로 검색...">
+            <button type="submit">검색</button>
+        </form>
+
+        <div class="sort-menu">
+            <span style="font-weight: bold; margin-right: 10px;">정렬:</span>
+            <a href="?sort=latest&q={{ q }}" class="{% if sort == 'latest' %}active{% endif %}">최신순</a>
+            <a href="?sort=title&q={{ q }}" class="{% if sort == 'title' %}active{% endif %}">제목순</a>
+        </div>
+    </div>
+
+    <div class="review-container">
+    {% for movie in page_obj %} 
+        <div class="Review">
+            <div class="movie-img">
+                {% if movie.poster_path %}
+                    <img src="https://image.tmdb.org/t/p/w342{{ movie.poster_path }}" alt="{{ movie.title }}">
+                {% elif movie.poster_image %}
+                    <img src="{{ movie.poster_image.url }}" alt="{{ movie.title }}">
+                {% else %}
+                    <div class="movie-no-img"><span>No Image</span></div>
+                {% endif %}
+            </div>
+            
+            <div class="movie-info">
+                <h3><a href="{% url 'movie_detail' movie.pk %}">{{ movie.title }}</a></h3>
+                
+                <p><span class="label">개봉</span> {{ movie.release_year }}년</p>
+                <p><span class="label">장르</span> {{ movie.get_genre_display|default:"미정" }}</p>
+                
+                <div class="rating-row">
+                    <span class="label">별점</span>
+                    <span class="star-rating">
+                        {% for star in movie.star_list %}
+                            {% if star == 'full' %}
+                                <span style="color: gold;">★</span>
+                            {% else %}
+                                <span style="color: #ccc;">★</span>
+                            {% endif %}
+                        {% endfor %}
+                    </span>
+                </div>
+            </div> 
+        </div>
+    {% endfor %}
+    </div>
+
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1&q={{ q }}&sort={{ sort }}">&laquo; 처음</a>
+                <a href="?page={{ page_obj.previous_page_number }}&q={{ q }}&sort={{ sort }}">이전</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+            </span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}&q={{ q }}&sort={{ sort }}">다음</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}&q={{ q }}&sort={{ sort }}">마지막 &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+
+</body>
+</html>

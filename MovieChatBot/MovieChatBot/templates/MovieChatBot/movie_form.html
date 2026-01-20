@@ -1,0 +1,91 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>영화 리뷰 작성</title>
+    <link rel="stylesheet" href="{% static 'review_form.css' %}">
+    <link rel="stylesheet" href="{% static 'reset.css' %}">
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <a href="{% url 'movie_list' %}"><h1>my<span style="color: red;">Movie</span>reviews</h1></a>
+        </div>
+    </div>
+    <hr>
+    
+    <div class="form-container">
+        <div class="form-header">
+            <h2 class="form-title"><span style="color:red">새 리뷰</span> 작성</h2>
+            <p class="form-subtitle">영화에 대한 솔직한 감상을 남겨보세요.</p>
+        </div>
+        
+        <form method="post" enctype="multipart/form-data" class="styled-form">
+            {% csrf_token %}
+            
+            <h3 class="section-title">영화 정보</h3>
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>영화 제목</label>
+                    <div class="input-wrapper">{{ movie_form.title }}</div>
+                </div>
+                
+                <div class="form-group">
+                    <label>개봉 년도</label>
+                    <div class="input-wrapper">{{ movie_form.release_year }}</div>
+                </div>
+
+                <div class="form-group">
+                    <label>감독</label>
+                    <div class="input-wrapper">{{ movie_form.director }}</div>
+                </div>
+
+                <div class="form-group">
+                    <label>장르</label>
+                    <div class="input-wrapper">{{ movie_form.genre }}</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>주연 배우</label>
+                <div class="input-wrapper">{{ movie_form.actors }}</div>
+                <small style="color: #888;">여러 명인 경우 쉼표(,)로 구분해주세요.</small>
+            </div>
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>러닝타임(분)</label>
+                    <div class="input-wrapper">{{ movie_form.running_time }}</div>
+                </div>
+
+                <div class="form-group">
+                    <label>포스터 이미지</label>
+                    <div class="input-wrapper file-input">{{ movie_form.poster_image }}</div>
+                </div>
+            </div>
+
+            <hr class="section-divider">
+
+            <h3 class="section-title">리뷰 정보</h3>
+            
+            <div class="form-group">
+                 <label>별점</label>
+                 <div class="input-wrapper">{{ review_form.rating }}</div>
+            </div>
+
+            <div class="form-group">
+                <label>리뷰 내용</label>
+                <div class="input-wrapper">{{ review_form.content }}</div>
+            </div>
+
+            <div class="form-actions">
+                <a href="{% url 'movie_list' %}" class="btn btn-cancel">취소</a>
+                <button type="submit" class="btn btn-submit">리뷰 작성 완료</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
