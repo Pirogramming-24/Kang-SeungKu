@@ -4,6 +4,8 @@ from django.conf import settings
 _sentiment_analyzer = None
 _translator = None
 _summarizer = None
+_ner_analyzer = None
+_spam_analyzer = None
 
 def get_sentiment_model():
     """
@@ -77,15 +79,25 @@ def get_summarizer():
     global _summarizer
     if _summarizer is None:
         print("📥 [System] 요약 모델 로드 중... (KoBART)")
-        # 한국어 요약에 특화된 모델입니다
         _summarizer = pipeline("summarization", model="gogamza/kobart-summarization")
     return _summarizer
 
 # 3. [핵심] 파이프라인 함수: 번역하고 -> 요약한다
 def generate_report(english_news: str):
     """
-    Input: 긴 영어 뉴스
-    Output: 번역된 한국어 전문 + 3줄 요약
+    Input: 
+    출처 : https://www.investing.com/news/stock-market-news/ford-recalls-over-119000-vehicles-over-engine-block-heater-fire-risk-nhtsa-says-4456865
+    
+    Jan 21 (Reuters) - Ford Motor is recalling 119,075 vehicles in the U.S. 
+    as the engine block heater may crack and leak coolant, potentially causing 
+    a short circuit and increasing the risk of a fire when the heater is plugged in, 
+    the National Highway Traffic Safety Administration said on Wednesday.
+
+    The recall includes certain Focus, Escape, Explorer and Lincoln MKC vehicles, the agency said.
+    Owners are advised not to plug in their block heaters until the vehicles are repaired, NHTSA said, 
+    adding that dealers will replace the block heaters free of charge.
+    
+    Output: 
     """
     # 1단계: 번역 (Translation)
     translator = get_translator()
@@ -93,7 +105,7 @@ def generate_report(english_news: str):
     trans_result = translator(english_news, max_length=512, truncation=True)
     korean_text = trans_result[0]['translation_text']
     
-    # 2단계: 요약 (Summarization) -> 번역된 결과를 입력으로 넣음! (이게 파이프라인!)
+    # 2단계: 요약 (Summarization) -> 번역된 결과를 입력으로 넣음
     summarizer = get_summarizer()
     summary_result = summarizer(korean_text, max_length=100, min_length=30, truncation=True)
     summary_text = summary_result[0]['summary_text']
@@ -102,4 +114,89 @@ def generate_report(english_news: str):
         'original': english_news,
         'translated': korean_text,
         'summary': summary_text
+    }
+
+
+    
+# 1. [준비하는 놈] NER 모델 로드
+def get_ner_model():
+    global _ner_analyzer
+    if _ner_analyzer is None:
+        print("📥 [System] 고성능 NER 모델(Large) 로드 중... (약 1.3GB)")
+        
+        # dbmdz/bert-large... : 베이스 모델보다 3배 더 크고 똑똑합니다.
+        # 일론 머스크를 사람으로 정확히 구분합니다.
+        _ner_analyzer = pipeline(
+            "ner", 
+            model="dbmdz/bert-large-cased-finetuned-conll03-english", 
+            aggregation_strategy="simple"
+        )
+    return _ner_analyzer
+
+# 2. [일하는 놈] 엔티티 추출 및 정리
+def extract_entities(text: str):
+    """
+    Input: "Elon Musk bought Twitter in San Francisco."
+    Output: {'ORG': ['Twitter'], 'PER': ['Elon Musk'], 'LOC': ['San Francisco']}
+    """
+    analyzer = get_ner_model()
+    results = analyzer(text)
+    
+    # 결과를 깔끔하게 분류해서 정리함
+    entities = {
+        "ORG": [],  # 조직/회사
+        "PER": [],  # 사람
+        "LOC": [],  # 장소
+        "MISC": []  # 기타
+    }
+    
+    for item in results:
+        category = item['entity_group'] # ORG, PER, LOC 등
+        word = item['word']
+        
+        # 리스트에 없는 경우에만 추가 (중복 제거)
+        if category in entities and word not in entities[category]:
+            entities[category].append(word)
+            
+    return entities
+
+# 1. [준비하는 놈] 스팸 모델 로드
+def get_spam_model():
+    global _spam_analyzer
+    if _spam_analyzer is None:
+        print("📥 [System] 스팸 탐지 모델 로드 중... (RoBERTa)")
+        # 스팸 분류 1타 강사 모델입니다.
+        _spam_analyzer = pipeline(
+            "text-classification", 
+            model="mshenoda/roberta-spam"
+        )
+    return _spam_analyzer
+
+# 2. [일하는 놈] 스팸 판별
+def detect_spam(text: str):
+    """
+    Input: "You won $1000 cash prize! Click here."
+    Output: {'label': 'SPAM', 'score': 98.5, 'korean_label': '스팸(위험)'}
+    """
+    analyzer = get_spam_model()
+    
+    # 결과 예시: [{'label': 'LABEL_1', 'score': 0.98}] 
+    # (LABEL_1 = 스팸, LABEL_0 = 정상)
+    result = analyzer(text)[0]
+    
+    label_code = result['label']
+    score = result['score']
+    
+    # 기계어(LABEL_1)를 사람이 보는 말로 변환
+    if label_code == 'LABEL_1':
+        final_label = 'spam'
+        korean_label = '🚫 스팸 / 피싱 (위험)'
+    else:
+        final_label = 'ham'
+        korean_label = '✅ 정상 메시지 (안전)'
+        
+    return {
+        'label': final_label,    # CSS 적용용 (spam/ham)
+        'score': round(score * 100, 2),
+        'korean_label': korean_label
     }

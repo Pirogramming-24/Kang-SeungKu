@@ -3,27 +3,95 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>Richman - 준비 중</title>
+    <title>Richman - 핵심 정보 추출 (NER)</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <style>
-        .working-container {
-            margin-top: 100px;
-            color: #666;
-        }
-        .icon { font-size: 50px; margin-bottom: 20px; display: block; }
-    </style>
 </head>
 <body>
 
-    <a href="{% url 'richman:main' %}" style="text-decoration: none; color: #007bff; font-weight: bold;">
-        ← 메인으로 돌아가기
-    </a>
+    <a href="{% url 'richman:main' %}" class="back-link">← 메인으로 돌아가기</a>
 
-    <div class="working-container">
-        <span class="icon">🚧</span>
-        <h1>현재 기능 구현 중입니다</h1>
-        <p>곧 멋진 AI 모델이 탑재될 예정입니다.</p>
+    <div class="page-container">
+        <h1>🔍 핵심 정보 추출 (NER)</h1>
+        <p>금융 뉴스에서 <b>회사(ORG), 인물(PER), 장소(LOC)</b>를 자동으로 찾아냅니다.</p>
+
+        <textarea id="newsText" placeholder="Example: Apple CEO Tim Cook visited the new store in Shanghai yesterday."></textarea>
+        <br>
+        <button onclick="extractEntities()" class="primary-btn">정보 추출 시작 🕵️‍♂️</button>
+
+        <div id="result-area" class="result-area">
+            
+            <div class="entity-box">
+                <h3>🏢 회사 / 조직 (ORG)</h3>
+                <div id="org-list"></div>
+            </div>
+
+            <div class="entity-box">
+                <h3>👤 핵심 인물 (PER)</h3>
+                <div id="per-list"></div>
+            </div>
+
+            <div class="entity-box">
+                <h3>🌍 장소 / 위치 (LOC)</h3>
+                <div id="loc-list"></div>
+            </div>
+
+        </div>
     </div>
 
+    <script>
+        async function extractEntities() {
+            const text = document.getElementById('newsText').value;
+            if(!text) { alert("문장을 입력해주세요!"); return; }
+
+            const btn = document.querySelector('button');
+            btn.innerText = "분석 중... 🕵️‍♂️";
+            btn.disabled = true;
+
+            try {
+                const response = await fetch("{% url 'richman:ner' %}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-CSRFToken': '{{ csrf_token }}',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: `text=${encodeURIComponent(text)}`
+                });
+
+                const data = await response.json();
+
+                // 결과 뿌리기 함수 (코드 중복 방지)
+                renderTags('org-list', data.ORG, 'ORG');
+                renderTags('per-list', data.PER, 'PER');
+                renderTags('loc-list', data.LOC, 'LOC');
+
+                document.getElementById('result-area').style.display = 'block';
+
+            } catch (e) {
+                alert("에러 발생: " + e.message);
+            } finally {
+                btn.innerText = "정보 추출 시작 🕵️‍♂️";
+                btn.disabled = false;
+            }
+        }
+
+        // 태그를 만들어서 HTML에 넣어주는 도우미 함수
+        function renderTags(elementId, items, type) {
+            const container = document.getElementById(elementId);
+            container.innerHTML = ""; // 초기화
+
+            if (!items || items.length === 0) {
+                container.innerHTML = '<span class="no-data">발견된 정보가 없습니다.</span>';
+                return;
+            }
+
+            items.forEach(item => {
+                const span = document.createElement('span');
+                span.className = `tag ${type}`; // 예: tag ORG
+                span.innerText = item;
+                container.appendChild(span);
+            });
+        }
+    </script>
 </body>
 </html>

@@ -297,7 +297,6 @@ poetry.toml
 pyrightconfig.json
 
 
-
 ### Windows ###
 # Windows thumbnail cache files
 Thumbs.db

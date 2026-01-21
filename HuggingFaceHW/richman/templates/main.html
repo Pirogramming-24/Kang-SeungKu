@@ -7,7 +7,18 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
-
+    <div style="text-align: right; margin-bottom: 20px;">
+        {% if user.is_authenticated %}
+            <span style="font-weight: bold; margin-right: 10px;">👤 {{ user.username }} 환영합니다!</span>
+            <form action="{% url 'logout' %}" method="post" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" style="background: none; border: none; color: #dc3545; cursor: pointer; text-decoration: underline;">로그아웃</button>
+            </form>
+        {% else %}
+            <a href="{% url 'login' %}" style="color: #007bff; text-decoration: none; font-weight: bold;">🔑 로그인</a>
+        {% endif %}
+    </div>
+    
     <h1>💰 Richman AI Solution</h1>
     <p>금융 IT 및 보안을 위한 AI 포트폴리오</p>
 

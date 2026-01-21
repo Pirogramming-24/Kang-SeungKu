@@ -121,3 +121,8 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# 로그아웃하면 메인으로
+LOGOUT_REDIRECT_URL = '/'
+# (주의: 로그인은 next 파라미터가 있으면 거기로 가고, 없으면 여기로 감)
+LOGIN_REDIRECT_URL = '/'

@@ -95,9 +95,8 @@ button.primary-btn {
 button.primary-btn:hover {
     background-color: #0056b3;
 }
-/* --- [추가] 리포트 페이지 (Pipeline) 전용 스타일 --- */
 
-/* 페이지 메인 컨테이너 (sentiment.html 등에서도 재사용 가능) */
+
 .page-container {
     max-width: 900px; 
     margin: 0 auto; 
@@ -176,4 +175,87 @@ button.primary-btn:hover {
 
 .back-link:hover {
     color: #007bff;
+}
+/* --- [추가] NER 페이지 전용 스타일 --- */
+
+/* 태그들이 담길 박스 */
+.entity-box {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.entity-box h3 {
+    margin-top: 0;
+    font-size: 1.1em;
+    color: #555;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+/* 개별 태그 디자인 */
+.tag {
+    display: inline-block;
+    padding: 8px 15px;
+    margin: 5px;
+    border-radius: 20px;
+    font-weight: bold;
+    color: white;
+    font-size: 0.9em;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* 카테고리별 색상 지정 */
+.tag.ORG { background-color: #007bff; } /* 파랑: 회사 */
+.tag.PER { background-color: #28a745; } /* 초록: 사람 */
+.tag.LOC { background-color: #dc3545; } /* 빨강: 장소 */
+.tag.MISC { background-color: #6c757d; } /* 회색: 기타 */
+
+/* 데이터가 없을 때 표시할 메시지 */
+.no-data {
+    color: #999;
+    font-style: italic;
+}
+
+/* --- [추가] 스팸 페이지 전용 스타일 --- */
+
+/* 결과 박스 애니메이션 효과 */
+.spam-result-box {
+    margin-top: 30px;
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    font-size: 1.2em;
+    display: none; /* 숨김 */
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* 스팸일 때 (빨강) */
+.spam-result-box.spam {
+    background-color: #ffe6e6;
+    border: 2px solid #dc3545;
+    color: #dc3545;
+}
+
+/* 정상일 때 (초록) */
+.spam-result-box.ham {
+    background-color: #e6ffed;
+    border: 2px solid #28a745;
+    color: #28a745;
+}
+
+.spam-score {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-top: 10px;
+    display: block;
 }
