@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from django.http import JsonResponse
-from .services.huggingface import analyze_news_sentiment
-
+from .services.huggingface import analyze_news_sentiment, generate_report
 # 1. 메인 대시보드
 def main(request):
     return render(request, 'main.html')
@@ -27,6 +26,17 @@ def spam_view(request):
 def ner_view(request):
     return render(request, 'ner.html')
 
-# 6. [복합 기능] 리포트 페이지 (껍데기)
 def report_view(request):
+    # POST 요청(분석 버튼 클릭)이 오면
+    if request.method == "POST" and request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        text = request.POST.get('text', '')
+        
+        # 파이프라인 가동! (번역 -> 요약)
+        try:
+            result = generate_report(text)
+            return JsonResponse(result)
+        except Exception as e:
+            print(f"Error: {e}")
+            return JsonResponse({'error': '모델 처리 중 오류가 발생했습니다.'}, status=500)
+            
     return render(request, 'report.html')

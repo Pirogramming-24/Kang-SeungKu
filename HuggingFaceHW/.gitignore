@@ -296,20 +296,7 @@ poetry.toml
 # LSP config files
 pyrightconfig.json
 
-### Web ###
-*.asp
-*.cer
-*.csr
-*.css
-*.htm
-*.html
-*.js
-*.jsp
-*.php
-*.rss
-*.wasm
-*.wat
-*.xhtml
+
 
 ### Windows ###
 # Windows thumbnail cache files

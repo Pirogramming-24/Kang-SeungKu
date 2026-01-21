@@ -1,9 +1,9 @@
 from transformers import pipeline
 from django.conf import settings
 
-# 1. 모델을 전역 변수로 선언 (Why? 성능 최적화)
-# 처음에는 비어있지만, 한 번 로드되면 메모리에 계속 상주합니다.
 _sentiment_analyzer = None
+_translator = None
+_summarizer = None
 
 def get_sentiment_model():
     """
@@ -53,4 +53,53 @@ def analyze_news_sentiment(headline: str):
         'label': label,           # positive/negative/neutral
         'score': round(score * 100, 2), # 확률을 백분율로 변환 (0.95 -> 95.0)
         'korean_label': korean_label
+    }
+
+# 1. 번역 모델 로드 (영어 -> 한국어)
+def get_translator():
+    global _translator
+    if _translator is None:
+        print("📥 [System] 번역 모델 로드 중... (NHNDQ NLLB)")
+        
+        model_id = "NHNDQ/nllb-finetuned-en2ko"
+        
+        # 2. 파이프라인 생성 (주의: NLLB는 언어 코드를 지정해야 정확합니다)
+        _translator = pipeline(
+            "translation", 
+            model=model_id, 
+            src_lang="eng_Latn",  # 입력: 영어
+            tgt_lang="kor_Hang"   # 출력: 한국어
+        )
+    return _translator
+
+# 2. 요약 모델 로드 (한국어 요약)
+def get_summarizer():
+    global _summarizer
+    if _summarizer is None:
+        print("📥 [System] 요약 모델 로드 중... (KoBART)")
+        # 한국어 요약에 특화된 모델입니다
+        _summarizer = pipeline("summarization", model="gogamza/kobart-summarization")
+    return _summarizer
+
+# 3. [핵심] 파이프라인 함수: 번역하고 -> 요약한다
+def generate_report(english_news: str):
+    """
+    Input: 긴 영어 뉴스
+    Output: 번역된 한국어 전문 + 3줄 요약
+    """
+    # 1단계: 번역 (Translation)
+    translator = get_translator()
+    # 긴 문장은 잘릴 수 있어서 truncation 옵션 추가
+    trans_result = translator(english_news, max_length=512, truncation=True)
+    korean_text = trans_result[0]['translation_text']
+    
+    # 2단계: 요약 (Summarization) -> 번역된 결과를 입력으로 넣음! (이게 파이프라인!)
+    summarizer = get_summarizer()
+    summary_result = summarizer(korean_text, max_length=100, min_length=30, truncation=True)
+    summary_text = summary_result[0]['summary_text']
+    
+    return {
+        'original': english_news,
+        'translated': korean_text,
+        'summary': summary_text
     }

@@ -1,0 +1,116 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Richman - 시장 감성 분석</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        /* 이 페이지 전용 스타일 */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .result-box {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            display: none; /* 처음엔 숨김 */
+        }
+
+        /* 결과 라벨 색상 */
+        .positive { color: #28a745; font-weight: bold; font-size: 1.2em; }
+        .negative { color: #dc3545; font-weight: bold; font-size: 1.2em; }
+        .neutral { color: #6c757d; font-weight: bold; font-size: 1.2em; }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #666;
+            text-decoration: none;
+            font-size: 0.9em;
+        }
+        .back-link:hover { color: #007bff; }
+    </style>
+</head>
+<body>
+
+    <a href="{% url 'richman:main' %}" class="back-link">← 메인 대시보드로 돌아가기</a>
+
+    <div class="container">
+        <h1>📈 시장 감성 분석 (FinBERT)</h1>
+        <p>글로벌 금융 뉴스를 입력하면 AI가 시장에 미칠 영향(호재/악재)을 분석합니다.</p>
+
+        <div>
+            <textarea id="newsText" placeholder="여기에 영어 금융 뉴스를 입력하세요...&#10;예시: Bitcoin crashes below $30k amid regulatory concerns."></textarea>
+            <br>
+            <button onclick="analyzeNews()" class="primary-btn">분석 시작 🚀</button>
+        </div>
+
+        <div id="result-box" class="result-box">
+            <h3>분석 결과: <span id="labelResult"></span></h3>
+            <p>AI 확신도: <span id="scoreResult"></span>%</p>
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 15px 0;">
+            <p style="font-size: 0.9em; color: #888;">입력된 뉴스:<br><span id="originalText" style="font-style: italic;"></span></p>
+        </div>
+    </div>
+
+    <script>
+        async function analyzeNews() {
+            const text = document.getElementById('newsText').value;
+            const resultBox = document.getElementById('result-box');
+            const btn = document.querySelector('button');
+
+            if (!text.trim()) { alert("뉴스를 입력해주세요!"); return; }
+
+            // 로딩 표시
+            btn.innerText = "분석 중... ⏳";
+            btn.disabled = true;
+
+            try {
+                // Django Urls에 정의된 'richman:analyze' 주소로 요청
+                const response = await fetch("{% url 'richman:analyze' %}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-CSRFToken': '{{ csrf_token }}', // 장고 보안 토큰
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: `text=${encodeURIComponent(text)}`
+                });
+
+                if (!response.ok) throw new Error("서버 오류 발생");
+
+                const data = await response.json();
+
+                // 결과 업데이트
+                const labelSpan = document.getElementById('labelResult');
+                labelSpan.innerText = data.korean_label;
+                labelSpan.className = data.label; // CSS 클래스 적용 (색상 변경)
+
+                document.getElementById('scoreResult').innerText = data.score;
+                document.getElementById('originalText').innerText = data.original_text;
+
+                // 결과창 보이기
+                resultBox.style.display = 'block';
+
+            } catch (error) {
+                console.error('Error:', error);
+                alert("분석에 실패했습니다. 서버가 켜져 있는지 확인해주세요.");
+            } finally {
+                // 버튼 원상복구
+                btn.innerText = "분석 시작 🚀";
+                btn.disabled = false;
+            }
+        }
+    </script>
+
+</body>
+</html>

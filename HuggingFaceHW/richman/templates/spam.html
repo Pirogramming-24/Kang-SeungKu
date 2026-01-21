@@ -1,0 +1,29 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Richman - 준비 중</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        .working-container {
+            margin-top: 100px;
+            color: #666;
+        }
+        .icon { font-size: 50px; margin-bottom: 20px; display: block; }
+    </style>
+</head>
+<body>
+
+    <a href="{% url 'richman:main' %}" style="text-decoration: none; color: #007bff; font-weight: bold;">
+        ← 메인으로 돌아가기
+    </a>
+
+    <div class="working-container">
+        <span class="icon">🚧</span>
+        <h1>현재 기능 구현 중입니다</h1>
+        <p>곧 멋진 AI 모델이 탑재될 예정입니다.</p>
+    </div>
+
+</body>
+</html>
