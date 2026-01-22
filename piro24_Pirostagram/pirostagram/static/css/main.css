@@ -1,0 +1,19 @@
+#container {
+    display: flex;
+    height: 100vh;
+}
+.main_menu {
+    padding: 3%;
+    background-color:blue;
+    width: 15%;
+}
+
+.main_container {
+    width: 50%;
+    background-color: brown;
+}
+
+.sub_menu {
+    width: 30%;
+    background-color: chocolate;
+}

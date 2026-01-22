@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block contents %}
+<!-- 전체 감싸기 -->
+<div id="container">
+    <!-- 왼쪽 메뉴바 -->
+    <div class="main_menu">
+        <a href="{% url 'pirostagram:main' %}">
+            <div style="margin-bottom:30px"><img src="{% static '/images/instagram_logo.svg' %}" alt="instagram logo" style="width: 120px;"></div>
+        </a>
+        <a href="#">
+            <div><img src="{% static "/images/home.png" %}" alt=""></div>
+        </a>
+        <a href="#">
+            <div><img src="{% static "/images/search.png "%}" alt=""></div>
+        </a>
+        <a href="#">
+            <div><img src="" alt=""></div>
+        </a>
+        <a href="#">
+            <div><img src="" alt=""></div>
+        </a>
+        <a href="#">
+            <div><img src="" alt=""></div>
+        </a>
+        <a href="#">
+            <div><img src="" alt=""></div>
+        </a>
+        <a href="#">
+            <div><img src="" alt=""></div>
+        </a>
+        <a href="#">
+            <div><img src="" alt=""></div>
+        </a>
+        <a href="#">
+            <div><img src="" alt=""></div>
+        </a>
+    </div>
+    <!-- 구분선 -->
+    <div style="width:1px; height:100%; background-color: white;"></div>
+    <!--피드 표시 화면 -->
+    <div class="main_container"></div>
+    <!-- 오른쪽 화면 -->
+    <div class="sub_menu"></div>
+</div>
+{% endblock %}
