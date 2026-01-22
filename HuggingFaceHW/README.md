@@ -53,41 +53,44 @@
 - [x] 제한 탭 접근 시 alert 후 로그인 페이지로 redirect (`login_required_alert` 유틸리티 구현)
 - [x] 로그인 성공 시 원래 페이지로 복귀 (Login View의 next 처리)
 
+## 프로젝트 구조 (Directory Tree)
+
+```text
 HuggingFaceHW
-├─ config
-│  ├─ asgi.py
-│  ├─ settings.py
-│  ├─ urls.py
-│  ├─ wsgi.py
-│  └─ __init__.py
-├─ manage.py
-├─ README.md
-├─ requirements.txt
-└─ richman
-   ├─ admin.py
-   ├─ apps.py
-   ├─ migrations
-   │  └─ __init__.py
-   ├─ models.py
-   ├─ services
-   │  └─ huggingface.py
-   ├─ static
-   │  ├─ css
-   │  │  └─ style.css
-   │  └─ js
-   ├─ templates
-   │  ├─ registration
-   │  │  ├─ login.html
-   │  │  └─ signup.html
-   │  ├─ alert_login.html
-   │  ├─ history.html
-   │  ├─ main.html
-   │  ├─ ner.html
-   │  ├─ report.html
-   │  ├─ sentiment.html
-   │  └─ spam.html
-   ├─ tests.py
-   ├─ urls.py
-   ├─ utils.py
-   ├─ views.py
-   └─ __init__.py
+├── config
+│   ├── asgi.py
+│   ├── settings.py
+│   ├── urls.py
+│   ├── wsgi.py
+│   └── __init__.py
+├── manage.py
+├── README.md
+├── requirements.txt
+└── richman
+    ├── admin.py
+    ├── apps.py
+    ├── migrations
+    │   └── __init__.py
+    ├── models.py
+    ├── services
+    │   └── huggingface.py
+    ├── static
+    │   ├── css
+    │   │   └── style.css
+    │   └── js
+    ├── templates
+    │   ├── registration
+    │   │   ├── login.html
+    │   │   └── signup.html
+    │   ├── alert_login.html
+    │   ├── history.html
+    │   ├── main.html
+    │   ├── ner.html
+    │   ├── report.html
+    │   ├── sentiment.html
+    │   └── spam.html
+    ├── tests.py
+    ├── urls.py
+    ├── utils.py
+    ├── views.py
+    └── __init__.py
