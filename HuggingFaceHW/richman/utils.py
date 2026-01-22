@@ -10,7 +10,7 @@ def login_required_alert(request):
     next_url = request.path 
     
     context = {
-        'msg': '로그인 후 이용해주세요 형님!',
+        'msg': '로그인 후 이용해주세요',
         'next_url': next_url
     }
     # 알림창을 띄워줄 임시 페이지 렌더링

@@ -1,18 +1,16 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
-from .models import ChatHistory # 모델 가져오기
-from .utils import login_required_alert # 아까 만든 쫓아내는 도구
-# 서비스 함수들 임포트 (기존 유지)
+from .models import ChatHistory 
+from .utils import login_required_alert
 from .services.huggingface import analyze_news_sentiment, generate_report, extract_entities, detect_spam
+from django.contrib.auth import login
+from django.contrib.auth.forms import UserCreationForm
 
-# 1. 메인 대시보드
+
 def main(request):
     return render(request, 'main.html')
 
-# ==========================================
-# 1. 공개 탭 (감성 분석) - 누구나 이용 가능
-# ==========================================
 def sentiment_view(request):
     return render(request, 'sentiment.html')
 
@@ -32,10 +30,6 @@ def analyze_view(request):
         
         return JsonResponse(result)
 
-# ==========================================
-# 2. 제한 탭 (나머지) - 로그인 필수 + Alert
-# ==========================================
-
 # (1) 스팸 탐지
 def spam_view(request):
     # 비로그인 접근 시 -> 알림창 띄우고 쫓아냄
@@ -45,8 +39,6 @@ def spam_view(request):
     if request.method == "POST":
         text = request.POST.get('text', '')
         result = detect_spam(text)
-        
-        # 로그인 상태가 확실하므로 바로 저장
         ChatHistory.objects.create(
             user=request.user,
             feature_name='spam',
@@ -94,3 +86,23 @@ def report_view(request):
         return JsonResponse(result)
 
     return render(request, 'report.html')
+
+def signup_view(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user) 
+            return redirect('richman:main')
+    
+    # 2. 가입 화면 요청 (GET)
+    else:
+        form = UserCreationForm()
+        
+    return render(request, 'registration/signup.html', {'form': form})
+
+@login_required # 로그인 안 했으면 접근 불가
+def history_view(request):
+    histories = ChatHistory.objects.filter(user=request.user).order_by('-created_at')
+    
+    return render(request, 'history.html', {'histories': histories})

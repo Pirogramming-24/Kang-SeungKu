@@ -209,7 +209,6 @@ button.primary-btn:hover {
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-/* 카테고리별 색상 지정 */
 .tag.ORG { background-color: #007bff; } /* 파랑: 회사 */
 .tag.PER { background-color: #28a745; } /* 초록: 사람 */
 .tag.LOC { background-color: #dc3545; } /* 빨강: 장소 */
@@ -258,4 +257,60 @@ button.primary-btn:hover {
     font-weight: bold;
     margin-top: 10px;
     display: block;
+}
+
+/* 입력 항목 하나를 감싸는 박스 */
+.form-group {
+    margin-bottom: 25px;  
+    text-align: left;   
+}
+
+.form-group label {
+    display: block;       /* 줄바꿈 강제 */
+    font-weight: bold;
+    margin-bottom: 8px;   /* 입력창과의 간격 */
+    color: #333;
+    font-size: 1.05em;
+}
+
+/* 입력창 디자인 (넓고 시원하게) */
+.form-group input {
+    width: 100%;          /* 가로 꽉 채우기 */
+    padding: 12px;        /* 내부 여백 */
+    border: 1px solid #ccc;
+    border-radius: 8px;   /* 둥근 모서리 */
+    font-size: 1em;
+    box-sizing: border-box; /* 테두리 포함 크기 계산 */
+    transition: border-color 0.3s;
+}
+
+.form-group input:focus {
+    border-color: #007bff; /* 클릭했을 때 파란색 강조 */
+    outline: none;
+}
+
+/* 도움말 텍스트 (비밀번호 조건 등) */
+.help-text {
+    display: block;
+    margin-top: 8px;
+    font-size: 0.85em;
+    color: #666;
+    line-height: 1.4;
+}
+
+/* 도움말이 리스트(점 찍힌 목록)로 나올 때 스타일 정리 */
+.help-text ul {
+    margin: 5px 0 0 0;
+    padding-left: 20px;
+}
+.help-text li {
+    margin-bottom: 3px;
+}
+
+/* 에러 메시지 (빨간 글씨) */
+.error-msg {
+    color: #dc3545;
+    font-size: 0.9em;
+    margin-top: 5px;
+    font-weight: bold;
 }

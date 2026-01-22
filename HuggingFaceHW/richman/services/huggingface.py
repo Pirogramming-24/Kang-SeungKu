@@ -8,10 +8,7 @@ _ner_analyzer = None
 _spam_analyzer = None
 
 def get_sentiment_model():
-    """
-    모델을 싱글톤(Singleton)처럼 관리하는 함수입니다.
-    앱이 실행되고 나서 모델을 한 번만 로드하여 메모리를 아낍니다.
-    """
+
     global _sentiment_analyzer
     
     if _sentiment_analyzer is None:
@@ -31,7 +28,7 @@ def analyze_news_sentiment(headline: str):
     Input: "Samsung Electronics reports record profits"
     Output: {'label': 'positive', 'score': 0.95, 'korean_label': '호재'}
     """
-    # 2. 모델 가져오기 (이미 로드되어 있으면 바로 가져옴)
+    # 2. 모델 가져오기 
     analyzer = get_sentiment_model()
     
     # 3. 모델 예측 실행
@@ -41,7 +38,6 @@ def analyze_news_sentiment(headline: str):
     label = result['label']
     score = result['score']
     
-    # 4. 결과를 한국어로 변환 (UI에 보여주기 위해)
     if label == 'positive':
         korean_label = '호재 🚀'
     elif label == 'negative':
@@ -65,7 +61,6 @@ def get_translator():
         
         model_id = "NHNDQ/nllb-finetuned-en2ko"
         
-        # 2. 파이프라인 생성 (주의: NLLB는 언어 코드를 지정해야 정확합니다)
         _translator = pipeline(
             "translation", 
             model=model_id, 
@@ -82,7 +77,7 @@ def get_summarizer():
         _summarizer = pipeline("summarization", model="gogamza/kobart-summarization")
     return _summarizer
 
-# 3. [핵심] 파이프라인 함수: 번역하고 -> 요약한다
+# 3. 파이프라인 함수: 번역하고 -> 요약한다
 def generate_report(english_news: str):
     """
     Input: 
@@ -118,14 +113,11 @@ def generate_report(english_news: str):
 
 
     
-# 1. [준비하는 놈] NER 모델 로드
 def get_ner_model():
     global _ner_analyzer
     if _ner_analyzer is None:
         print("📥 [System] 고성능 NER 모델(Large) 로드 중... (약 1.3GB)")
         
-        # dbmdz/bert-large... : 베이스 모델보다 3배 더 크고 똑똑합니다.
-        # 일론 머스크를 사람으로 정확히 구분합니다.
         _ner_analyzer = pipeline(
             "ner", 
             model="dbmdz/bert-large-cased-finetuned-conll03-english", 
@@ -133,7 +125,6 @@ def get_ner_model():
         )
     return _ner_analyzer
 
-# 2. [일하는 놈] 엔티티 추출 및 정리
 def extract_entities(text: str):
     """
     Input: "Elon Musk bought Twitter in San Francisco."
@@ -154,25 +145,21 @@ def extract_entities(text: str):
         category = item['entity_group'] # ORG, PER, LOC 등
         word = item['word']
         
-        # 리스트에 없는 경우에만 추가 (중복 제거)
         if category in entities and word not in entities[category]:
             entities[category].append(word)
             
     return entities
 
-# 1. [준비하는 놈] 스팸 모델 로드
 def get_spam_model():
     global _spam_analyzer
     if _spam_analyzer is None:
         print("📥 [System] 스팸 탐지 모델 로드 중... (RoBERTa)")
-        # 스팸 분류 1타 강사 모델입니다.
         _spam_analyzer = pipeline(
             "text-classification", 
             model="mshenoda/roberta-spam"
         )
     return _spam_analyzer
 
-# 2. [일하는 놈] 스팸 판별
 def detect_spam(text: str):
     """
     Input: "You won $1000 cash prize! Click here."
@@ -187,7 +174,6 @@ def detect_spam(text: str):
     label_code = result['label']
     score = result['score']
     
-    # 기계어(LABEL_1)를 사람이 보는 말로 변환
     if label_code == 'LABEL_1':
         final_label = 'spam'
         korean_label = '🚫 스팸 / 피싱 (위험)'
@@ -196,7 +182,7 @@ def detect_spam(text: str):
         korean_label = '✅ 정상 메시지 (안전)'
         
     return {
-        'label': final_label,    # CSS 적용용 (spam/ham)
+        'label': final_label,  
         'score': round(score * 100, 2),
         'korean_label': korean_label
     }

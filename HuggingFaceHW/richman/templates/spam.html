@@ -12,7 +12,8 @@
 
     <div class="page-container">
         <h1>🛡️ 스팸 및 피싱 탐지</h1>
-        <p>의심스러운 문자나 이메일 내용을 입력하면 <b>스팸(Spam)</b>인지 <b>정상(Ham)</b>인지 판별합니다.</p>
+        <p>의심스러운 문자나 이메일 내용을 입력하면 <b>스팸</b>인지 <b>정상</b>인지 판별합니다.</p><br>
+        <p>[model: mshenoda/roberta-spam]</p>
 
         <textarea id="spamText" placeholder="Example: Congratulations! You've won a $1,000 Walmart gift card. Click here to claim now!"></textarea>
         <br>
@@ -47,17 +48,13 @@
                 });
 
                 const data = await response.json();
-
-                // 결과창 업데이트
                 const box = document.getElementById('result-box');
                 
-                // 기존 클래스(spam/ham) 제거하고 새로 부여
                 box.className = 'spam-result-box ' + data.label; 
                 
                 document.getElementById('labelResult').innerText = data.korean_label;
                 document.getElementById('scoreResult').innerText = data.score + "%";
 
-                // 아이콘 설정
                 if(data.label === 'spam') {
                     document.getElementById('iconResult').innerText = "💀";
                 } else {
