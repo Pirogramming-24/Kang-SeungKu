@@ -10,38 +10,123 @@
             <div style="margin-bottom:30px"><img src="{% static '/images/instagram_logo.svg' %}" alt="instagram logo" style="width: 120px;"></div>
         </a>
         <a href="#">
-            <div><img src="{% static "/images/home.png" %}" alt=""></div>
+            <div class="head_menu"><img src="{% static "/images/home.png" %}" alt="home"><p>홈</p></div>
         </a>
         <a href="#">
-            <div><img src="{% static "/images/search.png "%}" alt=""></div>
+            <div class="head_menu"><img src="{% static "/images/reels.png "%}" alt="reels"><p>릴스</p></div>
         </a>
         <a href="#">
-            <div><img src="" alt=""></div>
+            <div class="head_menu"><img src="{% static "/images/send.png" %}" alt="send"><p>메시지</p></div>
         </a>
         <a href="#">
-            <div><img src="" alt=""></div>
+            <div class="head_menu"><img src="{% static "/images/search.png "%}" alt="search"><p>검색</p></div>
         </a>
         <a href="#">
-            <div><img src="" alt=""></div>
+            <div class="head_menu"><img src="{% static "/images/compass.png" %}" alt="compass"><p>탐색 탭</p></div>
         </a>
         <a href="#">
-            <div><img src="" alt=""></div>
+            <div class="head_menu"><img src="{% static "/images/blank_love.png" %}" style="width:32px;" alt="blank_love"><p>알림</p></div>
         </a>
         <a href="#">
-            <div><img src="" alt=""></div>
+            <div class="head_menu"><img src="{% static "/images/plus.png" %}" alt="plus"><p>만들기</p></div>
         </a>
         <a href="#">
-            <div><img src="" alt=""></div>
-        </a>
+            <div class="head_menu"><img src="{% static "/images/profile.png" %}" alt="profile"><p>프로필</p></div>
+        </a> <br>
         <a href="#">
-            <div><img src="" alt=""></div>
+            <div class="head_menu"><img src="{% static "/images/more_menu.png" %}"  alt="more"><p>더 보기</p></div>
         </a>
     </div>
     <!-- 구분선 -->
-    <div style="width:1px; height:100%; background-color: white;"></div>
+    <div style="width:1px; height:100%; background-color: gray;"></div>
     <!--피드 표시 화면 -->
-    <div class="main_container"></div>
+    <div class="main_container">
+        <div class="story">
+
+        </div>
+        <div class="feed">
+            <div class="card">
+                <div class="profile_info">
+                    <a href="#">
+                        <div class="userProfile">
+                            <img src="{% static "/images/profile.png" %}" style="height:32px; margin-right:10px;" alt="profile"><p>username</p>
+                        </div>
+                    </a>
+                    <a href="#"><img src="{% static "/images/dots.png" %}" style="width:20px;" alt="dots"></a>
+                </div>
+                <div class="photo">
+                    <img src="" alt="feed_photo">
+                </div>
+                <div class="buttons">
+                    <div class="many-buttons">
+                        <a href="#"><img src="{% static "/images/blank_love.png" %}" style="width:24px;" alt="like"></a><p>개수</p>
+                        <a href="#"><img src="{% static "/images/comment.png" %}" style="width:24px;" alt="comment"></a><p>개수</p>
+                        <a href="#"><img src="{% static "/images/send.png" %}" style="width:24px;" alt="send"></a><p>개수</p>
+                    </div>
+                    <a href="#">
+                        <div class="save"><img src="{% static "/images/save_instagram.png" %}" style="width:24px;" alt="save"></div>
+                    </a>
+                </div>
+                <div class="content">
+                    <p style="margin-right:10px;">작성자</p><p>내용</p>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- 오른쪽 화면 -->
-    <div class="sub_menu"></div>
+    <div class="sub_menu">
+        <div class="sub_menu_container">
+            <div class="profile_section">
+                <div class="user_img_box">
+                    <img src="{% static '/images/profile.png' %}" alt="my_profile">
+                </div>
+                <div class="user_info_text">
+                    <a href="#"><span class="username">my_account_id</span></a>
+                    <span class="name">내 이름</span>
+                </div>
+                <div class="switch_btn">
+                    <a href="#">전환</a>
+                </div>
+            </div>
+
+            <div class="recommend_header">
+                <span class="title">회원님을 위한 추천</span>
+                <a href="#" class="see_all">모두 보기</a>
+            </div>
+
+            <div class="recommend_list">
+                <div class="recommend_item">
+                    <div class="user_img_box small">
+                        <img src="{% static '/images/profile.png' %}" alt="recommend_user">
+                    </div>
+                    <div class="user_info_text">
+                        <a href="#"><span class="username">recommend_user_1</span></a>
+                        <span class="sub_text">회원님을 팔로우합니다</span>
+                    </div>
+                    <div class="follow_btn">
+                        <a href="#">팔로우</a>
+                    </div>
+                </div>
+                
+                <div class="recommend_item">
+                    <div class="user_img_box small">
+                        <img src="{% static '/images/profile.png' %}" alt="recommend_user">
+                    </div>
+                    <div class="user_info_text">
+                        <a href="#"><span class="username">piro_coding</span></a>
+                        <span class="sub_text">Instagram 신규 가입</span>
+                    </div>
+                    <div class="follow_btn">
+                        <a href="#">팔로우</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer_links">
+                <p>소개 · 도움말 · 홍보 센터 · API · 채용 정보 · <br>개인정보처리방침 · 약관 · 위치 · 언어</p>
+                <p class="copyright">© 2026 INSTAGRAM FROM META</p>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

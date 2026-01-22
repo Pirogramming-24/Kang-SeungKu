@@ -4,16 +4,198 @@
 }
 .main_menu {
     padding: 3%;
-    background-color:blue;
     width: 15%;
 }
+.main_menu a {
+    text-decoration: none;
+
+}
+.main_menu .head_menu {
+    display: flex;
+    align-items: center;
+    border-radius: 10px;
+    transition: 0.2s ease-in-out;
+}
+.main_menu .head_menu:hover {
+    background-color: gray;
+}
+.main_menu .head_menu img {
+    margin: 7px 10px 7px 5px;
+}
+.main_menu .head_menu p {
+    margin-bottom: 12px;
+    font-weight: bold;
+    color: black;
+}
+
 
 .main_container {
     width: 50%;
+    height: 100%;
+    overflow-y: scroll;
     background-color: brown;
+    -ms-overflow-style: none; 
 }
 
+/* 스크롤바 숨기기 (Webkit) */
+.main_container::-webkit-scrollbar {
+    display: none;
+
+}
+.main_container .story {
+    height: 15%;
+    background-color:darkolivegreen;
+}
+.main_container .feed {
+    margin: 5px;
+    padding: 0 50px 0px 50px;
+}
+.main_container .feed .card {
+    height: auto;
+    width: 100%;
+    background-color: deeppink;
+}
+.main_container .feed .card .profile_info {
+    padding: 0 20px;
+    background-color: coral;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.main_container .feed .card .profile_info a  {
+    text-decoration: none;
+}
+.main_container .feed .card .profile_info .userProfile {
+    display: flex;
+    align-items: center;
+}
+.main_container .feed .card .photo {
+    width: 100%;
+    aspect-ratio: 468 / 585; /* 또는 4 / 5 */
+    height: auto;
+    background-color: darkmagenta;
+}
+.main_container .feed .card .buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.main_container .feed .card .buttons .many-buttons {
+    display: flex;
+    align-items: center;
+}
+.main_container .feed .card .content {
+    display: flex;
+}
+
+/* 오른쪽 서브 메뉴 스타일 */
 .sub_menu {
-    width: 30%;
-    background-color: chocolate;
+    width: 35%; 
+    padding: 30px 20px 0 10px; 
+    background-color: #fafafa; 
+}
+
+.sub_menu_container {
+    max-width: 320px; /* 내용물이 너무 퍼지지 않게 제한 */
+}
+
+/* 공통: 유저 이미지 원형 */
+.user_img_box img {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid #dbdbdb;
+}
+
+.user_img_box.small img {
+    width: 32px;
+    height: 32px;
+}
+
+/* 공통: 텍스트 정렬 */
+.user_info_text {
+    display: flex;
+    flex-direction: column;
+    margin-left: 12px;
+    flex-grow: 1; /* 중간 공간 차지 */
+    justify-content: center;
+}
+
+.user_info_text .username {
+    font-weight: bold;
+    font-size: 14px;
+    color: #262626;
+    text-decoration: none;
+}
+
+.user_info_text .name, 
+.user_info_text .sub_text {
+    font-size: 12px;
+    color: #8e8e8e;
+    margin-top: 2px;
+}
+
+/* 내 프로필 섹션 */
+.profile_section {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.profile_section .switch_btn a {
+    color: #0095f6;
+    font-size: 12px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+/* 추천 헤더 */
+.recommend_header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.recommend_header .title {
+    color: #8e8e8e;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.recommend_header .see_all {
+    color: #262626;
+    font-size: 12px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+/* 추천 리스트 아이템 */
+.recommend_item {
+    display: flex;
+    align-items: center;
+    padding: 8px 0;
+}
+
+.follow_btn a {
+    color: #0095f6;
+    font-size: 12px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+/* 푸터 */
+.footer_links {
+    margin-top: 30px;
+}
+
+.footer_links p {
+    color: #c7c7c7;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.footer_links .copyright {
+    margin-top: 15px;
+    text-transform: uppercase;
 }
