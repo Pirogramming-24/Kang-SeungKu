@@ -2,131 +2,241 @@
 {% load static %}
 
 {% block contents %}
-<!-- 전체 감싸기 -->
 <div id="container">
-    <!-- 왼쪽 메뉴바 -->
-    <div class="main_menu">
-        <a href="{% url 'pirostagram:main' %}">
-            <div style="margin-bottom:30px"><img src="{% static '/images/instagram_logo.svg' %}" alt="instagram logo" style="width: 120px;"></div>
-        </a>
-        <a href="#">
-            <div class="head_menu"><img src="{% static "/images/home.png" %}" alt="home"><p>홈</p></div>
-        </a>
-        <a href="#">
-            <div class="head_menu"><img src="{% static "/images/reels.png "%}" alt="reels"><p>릴스</p></div>
-        </a>
-        <a href="#">
-            <div class="head_menu"><img src="{% static "/images/send.png" %}" alt="send"><p>메시지</p></div>
-        </a>
-        <a href="#">
-            <div class="head_menu"><img src="{% static "/images/search.png "%}" alt="search"><p>검색</p></div>
-        </a>
-        <a href="#">
-            <div class="head_menu"><img src="{% static "/images/compass.png" %}" alt="compass"><p>탐색 탭</p></div>
-        </a>
-        <a href="#">
-            <div class="head_menu"><img src="{% static "/images/blank_love.png" %}" style="width:32px;" alt="blank_love"><p>알림</p></div>
-        </a>
-        <a href="#">
-            <div class="head_menu"><img src="{% static "/images/plus.png" %}" alt="plus"><p>만들기</p></div>
-        </a>
-        <a href="#">
-            <div class="head_menu"><img src="{% static "/images/profile.png" %}" alt="profile"><p>프로필</p></div>
-        </a> <br>
-        <a href="#">
-            <div class="head_menu"><img src="{% static "/images/more_menu.png" %}"  alt="more"><p>더 보기</p></div>
-        </a>
-    </div>
-    <!-- 구분선 -->
-    <div style="width:1px; height:100%; background-color: gray;"></div>
-    <!--피드 표시 화면 -->
     <div class="main_container">
         <div class="story">
+            {% if has_my_story %}
+                <div class="story-item" onclick="openStory({{ user.id }})">
+                    <div class="story-circle gradient">
+                        {% if user.profile.image %}
+                            <img src="{% static '/images/profile.png' %}" class="story-img" alt="my story">
+                        {% else %}
+                            <img src="{% static '/images/profile.png' %}" class="story-img" alt="my story">
+                        {% endif %}
+                    </div>
+                    <span class="story-text">내 스토리</span>
 
+                    <div id="story-data-{{ user.id }}" style="display:none;">
+                        {% for s in user.stories.all %}
+                            <span class="story-url">{{ s.photo.url }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% else %}
+                <a href="{% url 'pirostagram:story_create' %}" class="story-item" style="text-decoration:none;">
+                    <div class="story-circle">
+                        <img src="{% static '/images/plus.png' %}" class="story-img" style="padding: 18px; background:white;" alt="add">
+                    </div>
+                    <span class="story-text">내 스토리</span>
+                </a>
+            {% endif %}
+
+
+            {% for u in story_users %}
+            <div class="story-item" onclick="openStory({{ u.id }})">
+                <div class="story-circle gradient">
+                    {% if u.profile.image %}
+                        <img src="{% static '/images/profile.png' %}" class="story-img" alt="story">
+                    {% else %}
+                        <img src="{% static '/images/profile.png' %}" class="story-img" alt="story">
+                    {% endif %}
+                </div>
+                <span class="story-text">{{ u.username }}</span>
+                
+                <div id="story-data-{{ u.id }}" style="display:none;">
+                    {% for s in u.stories.all %}
+                        <span class="story-url">{{ s.photo.url }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
         </div>
+        
         <div class="feed">
+            {% for post in posts %}
             <div class="card">
                 <div class="profile_info">
                     <a href="#">
                         <div class="userProfile">
-                            <img src="{% static "/images/profile.png" %}" style="height:32px; margin-right:10px;" alt="profile"><p>username</p>
+                            {% if post.author.profile.image %}
+                                <img src="{% static '/images/profile.png' %}" style="height:32px; width:32px; border-radius:50%; margin-right:10px; object-fit:cover;" alt="profile">
+                            {% else %}
+                                <img src="{% static '/images/profile.png' %}" style="height:32px; width:32px; border-radius:50%; margin-right:10px;" alt="profile">
+                            {% endif %}
+                            <p>{{ post.author.username }}</p>
                         </div>
                     </a>
-                    <a href="#"><img src="{% static "/images/dots.png" %}" style="width:20px;" alt="dots"></a>
+                    <a href="#"><img src="{% static '/images/dots.png' %}" style="width:20px;" alt="dots"></a>
                 </div>
                 <div class="photo">
-                    <img src="" alt="feed_photo">
+                    <img src="{{ post.photo.url }}" alt="feed_photo" style="width:100%; height:100%; object-fit:cover;">
                 </div>
                 <div class="buttons">
                     <div class="many-buttons">
-                        <a href="#"><img src="{% static "/images/blank_love.png" %}" style="width:24px;" alt="like"></a><p>개수</p>
-                        <a href="#"><img src="{% static "/images/comment.png" %}" style="width:24px;" alt="comment"></a><p>개수</p>
-                        <a href="#"><img src="{% static "/images/send.png" %}" style="width:24px;" alt="send"></a><p>개수</p>
+                        <a class="like_btn" onclick="likeAjax({{ post.id }})">
+                            {% if request.user in post.like_users.all %}
+                                <img src="{% static '/images/love.png' %}" id="like-icon-{{ post.id }}" style="width:24px;" alt="like">
+                            {% else %}
+                                <img src="{% static '/images/blank_love.png' %}" id="like-icon-{{ post.id }}" style="width:24px;" alt="like">
+                            {% endif %}
+                        </a>
+                        
+                        <p id="like-count-{{ post.id }}" style="margin-left: 5px;">{{ post.like_users.count }}</p>
+
+                        <a href="#"><img src="{% static '/images/comment.png' %}" style="width:24px; margin-left: 10px;" alt="comment"></a>
+                        <p style="margin-left: 5px;">{{ post.comments.count }}</p> 
+                        <a href="#"><img src="{% static '/images/send.png' %}" style="width:24px; margin-left: 10px;" alt="send"></a>
                     </div>
                     <a href="#">
-                        <div class="save"><img src="{% static "/images/save_instagram.png" %}" style="width:24px;" alt="save"></div>
+                        <div class="save"><img src="{% static '/images/save_instagram.png' %}" style="width:24px;" alt="save"></div>
                     </a>
                 </div>
                 <div class="content">
-                    <p style="margin-right:10px;">작성자</p><p>내용</p>
+                    <p style="margin-right:10px; font-weight:bold;">{{ post.author.username }}</p>
+                    <p>{{ post.content|linebreaksbr }}</p>
+                </div>
+                <div class="comments-section" style="padding: 0 20px 10px 20px;">
+                    {% for comment in post.comments.all %}
+                    <div class="comment" style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                        <div class="comment-content">
+                            <span style="font-weight: bold; margin-right: 5px;">{{ comment.author.username }}</span>
+                            <span>{{ comment.content }}</span>
+                        </div>
+                        
+                        {% if request.user == comment.author %}
+                        <a href="{% url 'pirostagram:comment_delete' comment.id %}" onclick="return confirm('정말 삭제하시겠습니까?')" style="text-decoration: none; color: gray;">
+                            x
+                        </a>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div class="comment-input" style="border-top: 1px solid #efefef; padding: 10px 20px;">
+                    <form action="{% url 'pirostagram:comment_create' post.id %}" method="POST" style="display: flex; justify-content: space-between; align-items: center;">
+                        {% csrf_token %}
+                        <div style="flex-grow: 1;">
+                            {{ comment_form.content }}
+                        </div>
+                        <button type="submit" style="background: none; border: none; color: #0095f6; font-weight: bold; cursor: pointer;">
+                            게시
+                        </button>
+                    </form>
                 </div>
             </div>
+            {% endfor %}
         </div>
     </div>
-    <!-- 오른쪽 화면 -->
+    
     <div class="sub_menu">
         <div class="sub_menu_container">
             <div class="profile_section">
                 <div class="user_img_box">
-                    <img src="{% static '/images/profile.png' %}" alt="my_profile">
+                    {% if user.profile.image %}
+                        <img src="{% static '/images/profile.png' %}" alt="my_profile">
+                    {% else %}
+                        <img src="{% static '/images/profile.png' %}" alt="my_profile">
+                    {% endif %}
                 </div>
                 <div class="user_info_text">
-                    <a href="#"><span class="username">my_account_id</span></a>
-                    <span class="name">내 이름</span>
+                    <a href="{% url 'pirostagram:profile' user.id %}"><span class="username">{{ user.username }}</span></a>
                 </div>
                 <div class="switch_btn">
                     <a href="#">전환</a>
                 </div>
             </div>
-
             <div class="recommend_header">
                 <span class="title">회원님을 위한 추천</span>
                 <a href="#" class="see_all">모두 보기</a>
             </div>
-
-            <div class="recommend_list">
-                <div class="recommend_item">
-                    <div class="user_img_box small">
-                        <img src="{% static '/images/profile.png' %}" alt="recommend_user">
-                    </div>
-                    <div class="user_info_text">
-                        <a href="#"><span class="username">recommend_user_1</span></a>
-                        <span class="sub_text">회원님을 팔로우합니다</span>
-                    </div>
-                    <div class="follow_btn">
-                        <a href="#">팔로우</a>
-                    </div>
-                </div>
-                
-                <div class="recommend_item">
-                    <div class="user_img_box small">
-                        <img src="{% static '/images/profile.png' %}" alt="recommend_user">
-                    </div>
-                    <div class="user_info_text">
-                        <a href="#"><span class="username">piro_coding</span></a>
-                        <span class="sub_text">Instagram 신규 가입</span>
-                    </div>
-                    <div class="follow_btn">
-                        <a href="#">팔로우</a>
-                    </div>
-                </div>
             </div>
-
-            <div class="footer_links">
-                <p>소개 · 도움말 · 홍보 센터 · API · 채용 정보 · <br>개인정보처리방침 · 약관 · 위치 · 언어</p>
-                <p class="copyright">© 2026 INSTAGRAM FROM META</p>
-            </div>
-        </div>
     </div>
 </div>
+
+<div id="storyModal" class="story-modal" onclick="closeStory(event)">
+    <div class="story-viewer" onclick="event.stopPropagation()"> <button class="nav-btn left" onclick="prevStory()">&#10094;</button>
+        <img id="storyImage" src="" alt="Story">
+        <button class="nav-btn right" onclick="nextStory()">&#10095;</button>
+    </div>
+    <span class="close-btn" onclick="closeStory(event)">&times;</span>
+</div>
+
+
+<script>
+    // 1. 좋아요 Ajax (기존 유지)
+    const likeAjax = (id) => {
+        const url = "{% url 'pirostagram:post_like' %}"; 
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({'id': id})
+        })
+        .then(response => response.json())
+        .then(data => {
+            const likeIcon = document.getElementById(`like-icon-${id}`);
+            const likeCount = document.getElementById(`like-count-${id}`);
+            likeCount.innerText = data.like_count;
+            if (data.message === '좋아요') {
+                likeIcon.src = "{% static '/images/filled_love.png' %}"; 
+            } else {
+                likeIcon.src = "{% static '/images/blank_love.png' %}"; 
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    // 2. 스토리 뷰어 기능 (신규)
+    let currentStories = []; 
+    let currentIndex = 0;    
+
+    function openStory(userId) {
+        // 숨겨진 데이터에서 이미지 URL들 가져오기
+        const dataDiv = document.getElementById('story-data-' + userId);
+        if (!dataDiv) return;
+
+        const spans = dataDiv.getElementsByClassName('story-url');
+        currentStories = [];
+        for (let span of spans) {
+            currentStories.push(span.innerText);
+        }
+
+        if (currentStories.length === 0) return;
+
+        // 첫 번째 이미지 보여주고 모달 열기
+        currentIndex = 0;
+        updateStoryImage();
+        document.getElementById('storyModal').style.display = 'flex';
+    }
+
+    function closeStory(event) {
+        // 배경이나 닫기 버튼 눌렀을 때만 닫기
+        if (!event || event.target.id === 'storyModal' || event.target.className === 'close-btn') {
+             document.getElementById('storyModal').style.display = 'none';
+        }
+    }
+
+    function nextStory() {
+        if (currentIndex < currentStories.length - 1) {
+            currentIndex++;
+            updateStoryImage();
+        } else {
+            document.getElementById('storyModal').style.display = 'none'; // 마지막이면 닫기
+        }
+    }
+
+    function prevStory() {
+        if (currentIndex > 0) {
+            currentIndex--;
+            updateStoryImage();
+        }
+    }
+
+    function updateStoryImage() {
+        const imgElement = document.getElementById('storyImage');
+        imgElement.src = currentStories[currentIndex];
+    }
+</script>
 {% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block contents %}
+<div style="padding: 20px; max-width: 600px; margin: 0 auto;">
+    <h2>"{{ query }}" 검색 결과</h2>
+    <hr>
+    {% if users %}
+        {% for user in users %}
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px;">
+            <div style="display: flex; align-items: center;">
+                <img src="{% static '/images/profile.png' %}" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;">
+                <span style="font-weight: bold;">{{ user.username }}</span>
+            </div>
+            <a href="{% url 'pirostagram:profile' user.id %}" style="text-decoration: none; color: #0095f6; font-weight: bold;">방문하기</a>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p>검색 결과가 없습니다.</p>
+    {% endif %}
+</div>
+{% endblock %}

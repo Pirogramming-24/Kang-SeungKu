@@ -20,7 +20,7 @@
     background-color: gray;
 }
 .main_menu .head_menu img {
-    margin: 7px 10px 7px 5px;
+    margin: 7px 25px 7px 5px;
 }
 .main_menu .head_menu p {
     margin-bottom: 12px;
@@ -33,7 +33,6 @@
     width: 50%;
     height: 100%;
     overflow-y: scroll;
-    background-color: brown;
     -ms-overflow-style: none; 
 }
 
@@ -41,10 +40,107 @@
 .main_container::-webkit-scrollbar {
     display: none;
 
-}
+}/* main.css 맨 아래에 추가 */
+
+/* 스토리 영역 전체 레이아웃 */
 .main_container .story {
-    height: 15%;
-    background-color:darkolivegreen;
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    overflow-x: auto; /* 가로 스크롤 */
+    white-space: nowrap;
+    background-color: white; /* 배경색 흰색으로 변경 (기존 brown 덮어쓰기) */
+    border-bottom: 1px solid #dbdbdb;
+}
+
+/* 스크롤바 숨기기 */
+.main_container .story::-webkit-scrollbar {
+    display: none;
+}
+
+/* 개별 스토리 아이템 (버튼 포함) */
+.story-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 15px;
+    cursor: pointer;
+    flex-shrink: 0; /* 찌그러짐 방지 */
+    text-decoration: none;
+    color: black;
+}
+
+/* 스토리 동그라미 (기본 회색 테두리) */
+.story-circle {
+    width: 62px;
+    height: 62px;
+    border-radius: 50%;
+    padding: 2px;
+    background: #dbdbdb;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 스토리 동그라미 (그라데이션 테두리 - 업로드 된 스토리용) */
+.story-circle.gradient {
+    background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+}
+
+/* 스토리 이미지 */
+.story-img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 2px solid white; /* 사진과 테두리 사이 흰 공백 */
+    object-fit: cover;
+    background-color: white;
+}
+
+/* 유저 이름 텍스트 */
+.story-text {
+    font-size: 12px;
+    margin-top: 5px;
+    max-width: 64px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 더보기 점 & 드롭다운 메뉴 */
+.profile_info {
+    position: relative; /* 드롭다운 기준점 */
+}
+
+.options-menu {
+    display: none; /* 기본은 숨김 */
+    position: absolute;
+    top: 40px;
+    right: 10px;
+    background-color: white;
+    border: 1px solid #dbdbdb;
+    border-radius: 4px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    z-index: 10;
+    width: 100px;
+    text-align: center;
+}
+
+.options-menu a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: black;
+    font-size: 14px;
+    border-bottom: 1px solid #efefef;
+}
+
+.options-menu a:hover {
+    background-color: #fafafa;
+}
+
+.options-menu a:last-child {
+    border-bottom: none;
+    color: red; /* 삭제 버튼은 빨간색 */
 }
 .main_container .feed {
     margin: 5px;
@@ -53,11 +149,9 @@
 .main_container .feed .card {
     height: auto;
     width: 100%;
-    background-color: deeppink;
 }
 .main_container .feed .card .profile_info {
     padding: 0 20px;
-    background-color: coral;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -71,14 +165,14 @@
 }
 .main_container .feed .card .photo {
     width: 100%;
-    aspect-ratio: 468 / 585; /* 또는 4 / 5 */
+    aspect-ratio: 468 / 585; 
     height: auto;
-    background-color: darkmagenta;
 }
 .main_container .feed .card .buttons {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 0 10px;
 }
 .main_container .feed .card .buttons .many-buttons {
     display: flex;
@@ -86,6 +180,7 @@
 }
 .main_container .feed .card .content {
     display: flex;
+    padding: 0 10px;
 }
 
 /* 오른쪽 서브 메뉴 스타일 */
@@ -199,3 +294,63 @@
     margin-top: 15px;
     text-transform: uppercase;
 }
+
+/* main.css 맨 아래에 추가 */
+
+/* 스토리 뷰어 모달 */
+.story-modal {
+    display: none; /* 기본 숨김 */
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9); /* 검은 배경 */
+    justify-content: center;
+    align-items: center;
+}
+
+.story-viewer {
+    position: relative;
+    width: 100%;
+    max-width: 450px; /* 모바일 비율 유지 */
+    height: 80%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.story-viewer img {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 8px;
+    object-fit: contain;
+}
+
+.close-btn {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    color: white;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 10000;
+}
+
+.nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
+    padding: 20px;
+    user-select: none;
+}
+
+.nav-btn.left { left: -60px; }
+.nav-btn.right { right: -60px; }
