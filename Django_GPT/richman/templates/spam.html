@@ -1,0 +1,75 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Richman - 스팸/피싱 탐지</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+    <a href="{% url 'richman:main' %}" class="back-link">← 메인으로 돌아가기</a>
+
+    <div class="page-container">
+        <h1>🛡️ 스팸 및 피싱 탐지</h1>
+        <p>의심스러운 문자나 이메일 내용을 입력하면 <b>스팸</b>인지 <b>정상</b>인지 판별합니다.</p><br>
+        <p>[model: mshenoda/roberta-spam]</p>
+
+        <textarea id="spamText" placeholder="Example: Congratulations! You've won a $1,000 Walmart gift card. Click here to claim now!"></textarea>
+        <br>
+        <button onclick="checkSpam()" class="primary-btn">보안 스캔 시작 🚨</button>
+
+        <div id="result-box" class="spam-result-box">
+            <span id="iconResult" style="font-size: 3em; display:block; margin-bottom:10px;"></span>
+            <span id="labelResult" style="font-weight: bold;"></span>
+            <span class="spam-score" id="scoreResult"></span>
+            <p style="font-size: 0.8em; color: #666; margin-top: 10px;">(확신도)</p>
+        </div>
+    </div>
+
+    <script>
+        async function checkSpam() {
+            const text = document.getElementById('spamText').value;
+            if(!text) { alert("내용을 입력해주세요!"); return; }
+
+            const btn = document.querySelector('button');
+            btn.innerText = "스캔 중... 🔍";
+            btn.disabled = true;
+
+            try {
+                const response = await fetch("{% url 'richman:spam' %}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-CSRFToken': '{{ csrf_token }}',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: `text=${encodeURIComponent(text)}`
+                });
+
+                const data = await response.json();
+                const box = document.getElementById('result-box');
+                
+                box.className = 'spam-result-box ' + data.label; 
+                
+                document.getElementById('labelResult').innerText = data.korean_label;
+                document.getElementById('scoreResult').innerText = data.score + "%";
+
+                if(data.label === 'spam') {
+                    document.getElementById('iconResult').innerText = "💀";
+                } else {
+                    document.getElementById('iconResult').innerText = "🛡️";
+                }
+
+                box.style.display = 'block';
+
+            } catch (e) {
+                alert("에러 발생: " + e.message);
+            } finally {
+                btn.innerText = "보안 스캔 시작 🚨";
+                btn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>

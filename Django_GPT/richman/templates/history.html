@@ -1,0 +1,96 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>히스토리 - Richman AI</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        .history-card {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            text-align: left;
+        }
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+            color: #666;
+        }
+        .badge {
+            padding: 3px 8px;
+            border-radius: 12px;
+            color: white;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        /* 기능별 뱃지 색상 */
+        .bg-sentiment { background-color: #ffc107; color: #333; } /* 노랑 */
+        .bg-spam { background-color: #dc3545; } /* 빨강 */
+        .bg-ner { background-color: #17a2b8; } /* 청록 */
+        .bg-report { background-color: #6610f2; } /* 보라 */
+        
+        .user-input { font-weight: bold; color: #333; margin-bottom: 10px; }
+        .ai-response { 
+            background: #f8f9fa; 
+            padding: 10px; 
+            border-radius: 5px; 
+            font-size: 0.9em; 
+            font-family: monospace; /* 코드 느낌 */
+            color: #0056b3;
+        }
+    </style>
+</head>
+<body style="background-color: #f4f6f9;">
+
+    <div class="page-container">
+        <h1>📜 내 대화 기록</h1>
+        <p>{{ user.username }}가 AI와 나눴던 대화들이 저장됩니다.</p>
+        
+        <a href="{% url 'richman:main' %}" class="back-link">← 메인으로 돌아가기</a>
+        <br><br>
+
+        {% if histories %}
+            {% for item in histories %}
+                <div class="history-card">
+                    <div class="history-header">
+                        <span>
+                            {% if item.feature_name == 'sentiment' %}
+                                <span class="badge bg-sentiment">감성분석</span>
+                            {% elif item.feature_name == 'spam' %}
+                                <span class="badge bg-spam">스팸탐지</span>
+                            {% elif item.feature_name == 'ner' %}
+                                <span class="badge bg-ner">NER</span>
+                            {% else %}
+                                <span class="badge bg-report">리포트</span>
+                            {% endif %}
+                        </span>
+                        <span>🕒 {{ item.created_at|date:"Y-m-d H:i" }}</span>
+                    </div>
+
+                    <div class="user-input">
+                        🗣️ {{user.username}}: "{{ item.user_input|truncatechars:50 }}"
+                    </div>
+                    
+                    <div class="ai-response">
+                        🤖 AI: {{ item.ai_response }}
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div style="padding: 40px; color: #999;">
+                <h3>아직 저장된 기록이 없습니다.</h3>
+                <p>로그인 상태에서 AI 기능을 사용해보세요!</p>
+            </div>
+        {% endif %}
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,57 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pirostagram</title>
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+</head>
+<body>
+
+    <div id="container" style="display: flex; height: 100vh; overflow: hidden;">
+        
+        <div class="main_menu" style="width: 250px; padding: 20px; border-right: 1px solid #dbdbdb; flex-shrink: 0;">
+            <a href="{% url 'pirostagram:main' %}">
+                <div style="margin-bottom:30px"><img src="{% static '/images/instagram_logo.svg' %}" alt="instagram logo" style="width: 120px;"></div>
+            </a>
+            <a href="{% url 'pirostagram:main' %}">
+                <div class="head_menu"><img src="{% static '/images/home.png' %}" alt="home"><p>홈</p></div>
+            </a>
+            
+            <div class="head_menu">
+                <img src="{% static '/images/search.png' %}" alt="search">
+                <form action="{% url 'pirostagram:search' %}" method="GET" style="display:inline;">
+                    <input type="text" name="q" placeholder="검색" style="border:none; outline:none; background:none; font-size:16px; width: 100px;">
+                </form>
+            </div>
+            
+            <a href="#">
+                <div class="head_menu"><img src="{% static '/images/reels.png' %}" alt="reels"><p>릴스</p></div>
+            </a>
+            <a href="#">
+                <div class="head_menu"><img src="{% static '/images/send.png' %}" alt="send"><p>메시지</p></div>
+            </a>
+            <a href="#">
+                <div class="head_menu"><img src="{% static '/images/blank_love.png' %}" style="width:32px;" alt="blank_love"><p>알림</p></div>
+            </a>
+            <a href="{% url 'pirostagram:post_create' %}">
+                <div class="head_menu"><img src="{% static '/images/plus.png' %}" alt="plus"><p>만들기</p></div>
+            </a>
+            <a href="{% url 'pirostagram:profile' user.id %}">
+                <div class="head_menu"><img src="{% static '/images/profile.png' %}" alt="profile"><p>프로필</p></div>
+            </a>
+            <br>
+            <a href="#">
+                <div class="head_menu"><img src="{% static '/images/more_menu.png' %}" alt="more"><p>더 보기</p></div>
+            </a>
+        </div>
+
+        <div class="content_area" style="flex-grow: 1; overflow-y: auto;">
+            {% block contents %}
+            {% endblock %}
+        </div>
+        
+    </div> </body>
+</html>

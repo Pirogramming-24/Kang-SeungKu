@@ -1,0 +1,90 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Richman - 글로벌 뉴스 리포트</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+    <a href="{% url 'richman:main' %}" class="back-link">← 메인으로 돌아가기</a>
+
+    <div class="page-container">
+        <h1>📰 글로벌 뉴스 리포트 (Pipeline)</h1>
+        <p>영어 뉴스를 입력하면 <b>[번역 모델]</b>과 <b>[요약 모델]</b>이 협력하여 리포트를 작성합니다.</p>
+
+        <textarea id="newsText" placeholder="Long English news article here..."></textarea>
+        <br>
+        <button onclick="generateReport()" class="primary-btn">리포트 생성 시작 ⚡</button>
+
+        <div id="loading" class="loading-msg">
+            AI 모델 2개가 연산 중입니다... (최초 실행 시 1~2분 소요) ⏳
+        </div>
+
+        <div id="result-area" class="result-area">
+            <div class="pipeline-box">
+                <div class="step">
+                    <h3>🇺🇸 1. 원본 </h3>
+                    <p id="originalText" style="font-size: 0.9em; color: #666;"></p>
+                </div>
+                
+                <div class="arrow">→</div>
+                
+                <div class="step">
+                    <h3>🇰🇷 2. 번역 [model : NHNDQ/nllb-finetuned-en2ko]</h3>
+                    <p id="translatedText" style="font-size: 0.9em;"></p>
+                </div>
+                
+                <div class="arrow">→</div>
+                
+                <div class="step highlight">
+                    <h3>📝 3. 요약 [model : daekeun-ml/ko-summary-t5] </h3>
+                    <p id="summaryText"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function generateReport() {
+            const text = document.getElementById('newsText').value;
+            if(!text) { alert("뉴스를 넣어주세요 형님!"); return; }
+
+            // UI 제어
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('result-area').style.display = 'none';
+            document.querySelector('button').disabled = true;
+
+            try {
+                const response = await fetch("{% url 'richman:report' %}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-CSRFToken': '{{ csrf_token }}',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: `text=${encodeURIComponent(text)}`
+                });
+
+                const data = await response.json();
+
+                if(data.error) throw new Error(data.error);
+
+                // 결과 뿌리기
+                document.getElementById('originalText').innerText = data.original;
+                document.getElementById('translatedText').innerText = data.translated;
+                document.getElementById('summaryText').innerText = data.summary;
+                
+                document.getElementById('result-area').style.display = 'block';
+
+            } catch (e) {
+                alert("에러 발생: " + e.message);
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+                document.querySelector('button').disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>

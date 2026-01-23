@@ -1,0 +1,36 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>로그인 - Richman AI</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body style="padding-top: 100px;">
+    <div class="page-container" style="max-width: 400px;">
+        <h1>🔑 로그인</h1>
+        <p>더 많은 AI 기능을 사용하시려면 로그인하세요.</p>
+
+        <form method="post">
+            {% csrf_token %}
+            <div style="text-align: left; margin-bottom: 15px;">
+                <label>ID:</label><br>
+                <input type="text" name="username" style="width: 90%; padding: 10px;">
+            </div>
+            <div style="text-align: left; margin-bottom: 20px;">
+                <label>PW:</label><br>
+                <input type="password" name="password" style="width: 90%; padding: 10px;">
+            </div>
+
+            <button type="submit" class="primary-btn" style="width: 100%;">로그인</button>
+        </form>
+        <div style="margin-top: 20px; text-align: center;">
+            아직 회원이 아니신가요?
+            <br>
+            <a href="{% url 'richman:signup' %}" style="color: #007bff; font-weight: bold; text-decoration: none;">
+                회원가입
+            </a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block contents %}
+<div style="display: flex; justify-content: center; align-items: center; height: 100vh; background-color: rgba(0,0,0,0.65);">
+    <div style="width: 500px; max-height: 80vh; background-color: white; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column;">
+        
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; border-bottom: 1px solid #dbdbdb;">
+            <a href="{% url 'pirostagram:main' %}" style="text-decoration: none; color: #262626;"><img src="{% static '/images/arrow_back.svg' %}" style="width:24px;" alt="back"></a> <h3 style="margin: 0; font-size: 16px; font-weight: 600;">새 게시물 만들기</h3>
+            <span style="width: 24px;"></span> 
+        </div>
+
+        <form action="" method="POST" enctype="multipart/form-data" style="display: flex; flex-direction: column; height: 100%;">
+            {% csrf_token %}
+            
+            <div style="padding: 20px; display: flex; flex-direction: column; align-items: center; flex-grow: 1; overflow-y: auto;">
+                <div style="margin-bottom: 20px; text-align: center;">
+                    <img id="preview" src="{% static '/images/media_icon.svg' %}" style="max-width: 100%; max-height: 300px; display: block; margin: 0 auto;"> <p style="margin-top: 10px; font-size: 20px; color: #262626;">사진과 동영상을 여기에 끌어다 놓으세요</p>
+                </div>
+                
+                <div style="margin-bottom: 20px; width: 100%;">
+                    {{ form.photo }}
+                </div>
+
+                <div style="width: 100%;">
+                    {{ form.content }}
+                </div>
+            </div>
+
+            <div style="padding: 10px 16px; border-top: 1px solid #dbdbdb;">
+                <button type="submit" style="width: 100%; background-color: #0095f6; color: white; border: none; padding: 8px; border-radius: 8px; font-weight: bold; cursor: pointer;">
+                    공유하기
+                </button>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<script>
+    const photoInput = document.getElementById('id_photo'); // 장고 폼 기본 ID
+    const preview = document.getElementById('preview');
+
+    if(photoInput){
+        photoInput.onchange = evt => {
+            const [file] = photoInput.files
+            if (file) {
+                preview.src = URL.createObjectURL(file)
+            }
+        }
+    }
+</script>
+{% endblock %}
