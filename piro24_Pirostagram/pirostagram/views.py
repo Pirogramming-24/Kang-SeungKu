@@ -157,7 +157,7 @@ def story_create(request):
             
     else:
         form = StoryForm()
-    return render(request, 'pirostagram/story_create.html', {'form': form})
+    return render(request, 'story_create.html', {'form': form})
 
 @login_required
 def post_update(request, post_id):
